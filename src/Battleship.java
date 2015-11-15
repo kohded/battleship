@@ -1,3 +1,4 @@
-public class Battleship {
+public class Battleship implements BattleshipMain {
 
+    
 }

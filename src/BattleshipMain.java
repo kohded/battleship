@@ -35,7 +35,7 @@ public interface BattleshipMain {
      * @throws IllegalStateException The game is not in Play Mode
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board) (
      */
-    public Status makeShot(Location loc, int x);
+    public playerInterface.Status makeShot(playerInterface.Location loc, int x);
 
     interface playerInterface {
         /**
