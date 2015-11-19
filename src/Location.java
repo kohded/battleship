@@ -6,7 +6,7 @@ class Location {
     /**
      * The row
      */
-    char row;
+    int row;
     /**
      * The column
      */
