@@ -18,5 +18,6 @@ enum Status {
     SUNK_AIRCRAFT_CARRIER,
     // return status, location was already played or invalid
     DO_OVER,
+    // return status, winner of the game
     WINNER
 }

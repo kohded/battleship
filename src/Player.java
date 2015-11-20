@@ -1,5 +1,5 @@
-public class Player implements playerInterface {
-    
+public class Player implements PlayerInterface {
+    ArrayList<Ship> ships;
     /**
      * Returns a reference to the ship's offensive board.
      * @return a reference to defensive board.
@@ -27,17 +27,17 @@ public class Player implements playerInterface {
         return 0;
     }
 
-    /**
-     * Returns whether a cell has been hit from the defensive board.
-     * @param x the  x (horizontal) coordinate to check at
-     * @param y the y (vertical) coordinate to check at
-     * @return true if the coordinate has been hit / missed before.
-     * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
-     */
-    @Override
-    public boolean isHit(int x, int y) {
-        return false;
-    }
+    ///**
+    // * Returns whether a cell has been hit from the defensive board.
+    // * @param x the  x (horizontal) coordinate to check at
+    // * @param y the y (vertical) coordinate to check at
+    // * @return true if the coordinate has been hit / missed before.
+    // * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
+    // */
+    //@Override
+    //public boolean isHit(int x, int y) {
+    //    return false;
+    //}
 
     /**
      * Makes a shot during Play Mode.
@@ -51,6 +51,10 @@ public class Player implements playerInterface {
         return null;
     }
 
+    public void placeShotResult(Status x) {
+        // depending on status, update offensive board
+    }
+
     /**
      * Clear all ships from offensive and defensive grid, and reset all counters.
      */
@@ -59,8 +63,7 @@ public class Player implements playerInterface {
 
     }
 
-
-    private void isLegalMove() {
-
+    private void isMakeShotLegal() {
+        // current player
     }
 }

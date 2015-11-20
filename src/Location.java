@@ -1,4 +1,3 @@
-
 /**
  * A helper class for location
  */
