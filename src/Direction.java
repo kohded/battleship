@@ -1,14 +1,19 @@
 enum Direction {
     /**
-     * Corresponds to the vertical negative axis.
+     * Corresponding UP directions
      */
-    VERTICAL,
+    UP,
+    UPLEFT,
+    UPRIGHT,
     /**
-     * Corresponds to the horizontal positive axis
+     * Corresponding DOWN directions
      */
-    HORIZONTAL,
+    DOWN,
+    DOWNLEFT,
+    DOWNRIGHT,
     /**
-     * Corresponds to the diagonal position
+     * Corresponding LEFT & RIGHT directions
      */
-    DIAGONAL;
+    LEFT,
+    RIGHT
 }

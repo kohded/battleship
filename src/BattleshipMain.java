@@ -1,23 +1,5 @@
 public class BattleShipMain implements BattleShipMainInterface {
     /**
-     * Determines the winner of the game.
-     * @return the winning player but returns null no winner yet
-     */
-    @Override
-    public PlayerInterface winner() {
-        return null;
-    }
-
-    /**
-     * Returns a reference to the players array, with index 0 being player 1 and index 1 being player 2.
-     * @return a reference to the players array.
-     */
-    @Override
-    public PlayerInterface[] getPlayers() {
-        return new PlayerInterface[0];
-    }
-
-    /**
      * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was madagainst it)
      * the other player.
      * For example, one player (A) makes a "shot" a some location on the board, designated by a letter (A-J) and a number (1-10).
@@ -27,8 +9,7 @@ public class BattleShipMain implements BattleShipMainInterface {
      * @throws IllegalStateException    The game is not in Play Mode
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board) (
      */
-    @Override
-    public Status makeShot(Location loc, int player) {
+    public Status makeShot(Location loc) {
         //is movelegal()
         //
         // places move()
@@ -37,6 +18,8 @@ public class BattleShipMain implements BattleShipMainInterface {
         //
         // current playe place the result of the shot
         // player1.placeResult(loc);
+        //Funnels to the right player
+        //Player1.makeShote or Player2.makeShote
         return null;
     }
 

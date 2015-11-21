@@ -16,7 +16,7 @@ public class Player implements PlayerInterface {
      * @return a reference to defensive board.
      */
     @Override
-    public char[][] getShipDefensiveBoard() {
+    public char[][] getDefensiveBoard() {
         return new char[0][];
     }
 
@@ -25,7 +25,7 @@ public class Player implements PlayerInterface {
      * @return number of hits
      */
     @Override
-    public int getShotsTaken() {
+    public int getHits() {
         return 0;
     }
 
@@ -40,13 +40,14 @@ public class Player implements PlayerInterface {
     public Status makeShot(Location loc) {
         return null;
         //Check if a hit or miss
-    }
 
-    private void placeShotResult(Status x) {
-        // depending on status, update offensive board
     }
 
     private void isMakeShotLegal() {
         // current player
+    }
+
+    private void placeShotResult(Status x) {
+        // depending on status, update offensive board
     }
 }

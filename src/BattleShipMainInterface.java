@@ -4,25 +4,30 @@
 
 public interface BattleShipMainInterface {
 
-    // return players.player1;
-
-    // currgnt player
-    Players currentPlayer(){
-        if(player1 turn){
-            return Players.player1;
-        }
-        if(player2Turn){
-            return Players.player2;
-        }
-    }
+    // current player
+    //Players getCurrentPlayer(){
+    //    if(player1 turn){
+    //        return Players.PLAYER1;
+    //    }
+    //    if(player2Turn){
+    //        return Players.PLAYER2;
+    //    }
+    //}
 
     //4 methods that return all 4 boards
-    public char getPlayer1DefBoard(Location loc){
-        //call getOffensiveBoard & getShipDefensiveBoard
-        player1.getDefBoard()[x][y];
-    }
-        public getPlayer2defBoard()
-            public getPlayer
+    //public char getPlayer1OffBoard(Location loc){
+    //    //call getOffensiveBoard & getShipDefensiveBoard
+    //    player1.getDefBoard()[x][y];
+    //}
+    //public char getPlayer1DefBoard(Location loc){
+    //    player1.getDefBoard()[x][y];
+    //}
+    //public char getPlayer2OffBoard(Location loc){
+    //    player1.getDefBoard()[x][y];
+    //}
+    //public char getPlayer2DefBoard(Location loc){
+    //    player1.getDefBoard()[x][y];
+    //}
 
     /**
      * Makes a shot during Play Mode of one player, marking the offensive board of the player shooting and the defensive board of
@@ -30,12 +35,11 @@ public interface BattleShipMainInterface {
      * For example, one player (A) makes a "shot" a some location on the board, designated by a letter (A-J) and a number (1-10).
      * The corresponding location on other player's (B's) defensive grid is checked for a vessel in that square. T
      * @param loc    The designator for the shot
-     * @param player 1 for player 1 and 2  for player 2
      * @return The status of the shot. See the status constants
      * @throws IllegalStateException    The game is not in Play Mode
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board) (
      */
-    public Status makeShot(Location loc, int player);
+    public Status makeShot(Location loc);
 
     /**
      * Places a ship in on defensive board at the starting vertical and

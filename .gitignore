@@ -1,6 +1,8 @@
 *.class
 .idea/
 *.iml
+*.txt
+*.docx
 out/
 
 # Mobile Tools for Java (J2ME)
