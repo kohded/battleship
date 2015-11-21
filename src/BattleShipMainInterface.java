@@ -3,24 +3,26 @@
  */
 
 public interface BattleShipMainInterface {
-    /**
-     * Determines the winner of the game.
-     * @return the winning player
-     * @throws IllegalStateException if the game is not over, that is one of the players hasn't run out of ships
-     */
-    PlayerInterface winner();
 
-    /**
-     * Checks whether defensive grid of any of the two palyers has no more ships.
-     * @return <tt>true</tt> if defensive grid of any of the two palyers has no more ships.
-     */
-    public boolean checkForWinner();
+    // return players.player1;
 
-    /**
-     * Returns a reference to the players array, with index 0 being player 1 and index 1 being player 2.
-     * @return a reference to the players array.
-     */
-    PlayerInterface[] getPlayers();
+    // currgnt player
+    Players currentPlayer(){
+        if(player1 turn){
+            return Players.player1;
+        }
+        if(player2Turn){
+            return Players.player2;
+        }
+    }
+
+    //4 methods that return all 4 boards
+    public char getPlayer1DefBoard(Location loc){
+        //call getOffensiveBoard & getShipDefensiveBoard
+        player1.getDefBoard()[x][y];
+    }
+        public getPlayer2defBoard()
+            public getPlayer
 
     /**
      * Makes a shot during Play Mode of one player, marking the offensive board of the player shooting and the defensive board of
@@ -45,5 +47,5 @@ public interface BattleShipMainInterface {
      *                                  a ship of that type (for destoryer, it will allow upto two ships of the same kind) or if the the ship can't be drawn (it can't be
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
-    public void placeShip(Ship ship, Direction d, Location loc);
+    public void placeShip(ShipTypes ship, Direction d, Location loc);
 }

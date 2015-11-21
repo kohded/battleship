@@ -1,4 +1,18 @@
 public enum ShipTypes {
-    // destories
-    //
+    /**
+     * Aircraft.
+     */
+    AIRCRAFT,
+    /**
+     * Battleship.
+     */
+    BATTLESHIP,
+    /**
+     * Cruiser.
+     */
+    CRUISER,
+    /**
+     * Destroyer Ship.
+     */
+    DESTROYER
 }

@@ -30,6 +30,7 @@ public class BattleShipMain implements BattleShipMainInterface {
     @Override
     public Status makeShot(Location loc, int player) {
         //is movelegal()
+        //
         // places move()
         // palyer 1 is current player
         // call status result = player2.makeShot(loc);
@@ -37,6 +38,10 @@ public class BattleShipMain implements BattleShipMainInterface {
         // current playe place the result of the shot
         // player1.placeResult(loc);
         return null;
+    }
+
+    private void isMakeShotLegal() {
+        // current player
     }
 
     /**
@@ -50,7 +55,7 @@ public class BattleShipMain implements BattleShipMainInterface {
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
     @Override
-    public void placeShip(Ship ship, Direction d, Location loc) {
+    public void placeShip(ShipTypes ship, Direction d, Location loc) {
         // after 5 legal placements, swtich to player two
         // aftr 10 placemnts ,swtich to player one
         // any calls after this will return "cant be placed"
@@ -58,7 +63,7 @@ public class BattleShipMain implements BattleShipMainInterface {
 
     }
 
-    private void isplaceShipLegal() {
+    private void isPlaceShipLegal() {
         // current player
     }
 }
