@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
     /**
@@ -27,18 +29,6 @@ public class Player implements PlayerInterface {
         return 0;
     }
 
-    ///**
-    // * Returns whether a cell has been hit from the defensive board.
-    // * @param x the  x (horizontal) coordinate to check at
-    // * @param y the y (vertical) coordinate to check at
-    // * @return true if the coordinate has been hit / missed before.
-    // * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
-    // */
-    //@Override
-    //public boolean isHit(int x, int y) {
-    //    return false;
-    //}
-
     /**
      * Makes a shot during Play Mode.
      * @param loc The designator for the shot
@@ -49,18 +39,11 @@ public class Player implements PlayerInterface {
     @Override
     public Status makeShot(Location loc) {
         return null;
+        //Check if a hit or miss
     }
 
-    public void placeShotResult(Status x) {
+    private void placeShotResult(Status x) {
         // depending on status, update offensive board
-    }
-
-    /**
-     * Clear all ships from offensive and defensive grid, and reset all counters.
-     */
-    @Override
-    public void resetBoards() {
-
     }
 
     private void isMakeShotLegal() {
