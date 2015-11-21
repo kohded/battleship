@@ -24,6 +24,7 @@ public class BattleShipMain implements BattleShipMainInterface {
     }
 
     private void isMakeShotLegal() {
+        int x;
         // current player
     }
 
