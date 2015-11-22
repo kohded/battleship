@@ -3,7 +3,6 @@
  */
 
 public interface BattleShipMainInterface {
-
     // current player
     //Players getCurrentPlayer(){
     //    if(player1 turn){

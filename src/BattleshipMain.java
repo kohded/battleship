@@ -1,4 +1,6 @@
 public class BattleShipMain implements BattleShipMainInterface {
+    Player player1 = new Player();
+    Player player2 = new Player();
     /**
      * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was madagainst it)
      * the other player.
@@ -23,9 +25,10 @@ public class BattleShipMain implements BattleShipMainInterface {
         return null;
     }
 
-    private void isMakeShotLegal() {
+    private boolean isMakeShotLegal() {
         int x;
         // current player
+        return true;
     }
 
     /**
@@ -47,7 +50,8 @@ public class BattleShipMain implements BattleShipMainInterface {
 
     }
 
-    private void isPlaceShipLegal() {
+    private boolean isPlaceShipLegal() {
         // current player
+        return true;
     }
 }
