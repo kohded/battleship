@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
  */
 public class ButtonListener implements ActionListener {
     private BattleShipMain model;
-    BattleShipGraphics setup;
-    public ButtonListener (BattleShipMain model, BattleShipGraphics setup){
+    BattleShipIntro setup;
+    public ButtonListener (BattleShipMain model, BattleShipIntro setup){
         // store model
         // store setup
     }

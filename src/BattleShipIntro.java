@@ -1,5 +1,3 @@
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,18 +7,27 @@ import java.io.IOException;
 /**
  * Created by anjeo on 11/20/2015.
  */
-public class BattleShipGraphics extends JPanel {
+public class BattleShipIntro extends JPanel {
     public static final int SQUARE_LENGTH = 10;
     //width of board
     public static final int WIDTH= 650;
     //length of board
     public static final int LENGTH= 380;
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
     JFrame frame;
     playerView player1;
     playerView player2;
 
 
-    public BattleShipGraphics (){
+    public BattleShipIntro(){
         frame = new JFrame();
         frame.setSize(WIDTH,LENGTH);
         player1 = new playerView(Players.PLAYER1);
@@ -43,7 +50,7 @@ public class BattleShipGraphics extends JPanel {
                 Add jpanel to jframe 9panel contaisn the name )
                 // panel should have picture and two buttons inside it for figuring out the name
                 // when another button is clicked, it should check what is niside the other buttons
-                // and decide whether to remove the jpanel or stay (will be passed in BattleShipGraphics)
+                // and decide whether to remove the jpanel or stay (will be passed in BattleShipIntro)
                 // and register all the jubttons with one action lister (call a method)
                 // this action listerne will pop player 1 jframe or the other one based on stuff
                 // then using the nmaes, pop player 1 interface.
@@ -80,6 +87,6 @@ public class BattleShipGraphics extends JPanel {
     }
 
     public static void main (String [] args){
-        BattleShipGraphics x  =  new BattleShipGraphics();
+        BattleShipIntro x  =  new BattleShipIntro();
     }
 }

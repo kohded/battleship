@@ -3,19 +3,19 @@ public interface PlayerInterface {
      * Returns a reference to the ship's offensive board.
      * @return a reference to defensive board.
      */
-    public char[][] getOffensiveBoard();
+    public possibleBoardStates[][] getOffensiveBoard();
 
     /**
      * Returns a reference to the ship's defensive board.
      * @return a reference to defensive board.
      */
-    public char[][] getDefensiveBoard();
+    public possibleBoardStates[][] getDefensiveBoard();
 
     /**
      * Returns the number of hits this player successfuly made on the player.
      * @return number of hits
      */
-    public int getHits();
+    public int getShipsLeft();
 
     /**
      * Makes a shot during Play Mode.

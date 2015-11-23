@@ -40,8 +40,8 @@ public class playerView {
         playerOffesniveBoard = new JButton[SQUARE_LENGTH][SQUARE_LENGTH];
         playerDefensiveBoard = new JButton[SQUARE_LENGTH][SQUARE_LENGTH];
         playerName = new JTextField();
-        int width = BattleShipGraphics.WIDTH;
-        int length = BattleShipGraphics.LENGTH;
+        int width = BattleShipIntro.WIDTH;
+        int length = BattleShipIntro.LENGTH;
         if(player == Players.PLAYER2){
             STARTING_Y_RELATIVE = STARTING_Y_RELATIVE + LENGTH_RELATIVE;
         }

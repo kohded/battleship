@@ -13,19 +13,21 @@ public interface BattleShipMainInterface {
     //    }
     //}
 
-    //4 methods that return all 4 boards
-    //public char getPlayer1OffBoard(Location loc){
-    //    //call getOffensiveBoard & getShipDefensiveBoard
-    //    player1.getDefBoard()[x][y];
+    /**
+     *     4 methods that return all 4 boards
+     */
+   // public char getPlayer1OffBoard(Location loc){
+        //call getOffensiveBoard & getShipDefensiveBoard
+     //   player1.getDefBoard()[loc.row][loc.col];
     //}
     //public char getPlayer1DefBoard(Location loc){
-    //    player1.getDefBoard()[x][y];
+    //    player1.getDefBoard()[loc.row][loc.col];
     //}
     //public char getPlayer2OffBoard(Location loc){
-    //    player1.getDefBoard()[x][y];
+    //    player1.getDefBoard()[loc.row][loc.col];
     //}
     //public char getPlayer2DefBoard(Location loc){
-    //    player1.getDefBoard()[x][y];
+    //    player1.getDefBoard()[loc.row][loc.col];
     //}
 
     /**
@@ -50,5 +52,5 @@ public interface BattleShipMainInterface {
      *                                  a ship of that type (for destoryer, it will allow upto two ships of the same kind) or if the the ship can't be drawn (it can't be
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
-    public void placeShip(ShipTypes ship, Direction d, Location loc);
+    public void placeShip(possibleBoardStates ship, Direction d, Location loc);
 }

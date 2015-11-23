@@ -1,6 +1,9 @@
 public class BattleShipMain implements BattleShipMainInterface {
     Player player1 = new Player();
     Player player2 = new Player();
+    int counterPlaceShip;
+    Player currentPlayer;
+    Player otherPlayer;
     /**
      * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was madagainst it)
      * the other player.
@@ -12,23 +15,28 @@ public class BattleShipMain implements BattleShipMainInterface {
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board) (
      */
     public Status makeShot(Location loc) {
-        //is movelegal()
-        //
-        // places move()
-        // palyer 1 is current player
-        // call status result = player2.makeShot(loc);
-        //
-        // current playe place the result of the shot
-        // player1.placeResult(loc);
-        //Funnels to the right player
-        //Player1.makeShote or Player2.makeShote
-        return null;
+        /**
+         *  initialize status to otherplayer.makerShot(loc)
+         *  call currentPlayer.placeResult(status,loc)
+         *  if status is miss
+         *      swap current player to other player
+         *  return status
+         */
     }
 
-    private boolean isMakeShotLegal() {
-        int x;
-        // current player
-        return true;
+    /**
+     *  Gets the value of the board state at Location
+     *  @ param loc location where to get board state
+     *  @ param player which player's board to print
+     *  @ return board status at location
+     */
+    public possibleBoardStates getPlayerOffBoard(Location loc, Players player) {
+        /**
+         * if player1 equals player
+         *      return  player1.getOffensiveBoard().[loc.row][loc.col]
+         * else
+         *      return  player2.getOffensiveBoard().[loc.row][loc.col]
+         */
     }
 
     /**
@@ -42,7 +50,10 @@ public class BattleShipMain implements BattleShipMainInterface {
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
     @Override
-    public void placeShip(ShipTypes ship, Direction d, Location loc) {
+    public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
+        /**
+         *
+         */
         // after 5 legal placements, swtich to player two
         // aftr 10 placemnts ,swtich to player one
         // any calls after this will return "cant be placed"
@@ -50,8 +61,13 @@ public class BattleShipMain implements BattleShipMainInterface {
 
     }
 
-    private boolean isPlaceShipLegal() {
-        // current player
+    public boolean setupFinished(){
+        /* if (number of times place ship called is greater than 9)
+            return true
+           else
+            return false
+        */
         return true;
     }
+
 }

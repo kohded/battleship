@@ -1,18 +1,5 @@
-public enum ShipTypes {
-    /**
-     * Aircraft.
-     */
-    AIRCRAFT,
-    /**
-     * Battleship.
-     */
-    BATTLESHIP,
-    /**
-     * Cruiser.
-     */
-    CRUISER,
-    /**
-     * Destroyer Ship.
-     */
-    DESTROYER
+/**
+ * Created by anjeo on 11/23/2015.
+ */
+public class ShipTypes {
 }
