@@ -4,8 +4,16 @@ public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
     possibleBoardStates[][] offensiveBoard;
     possibleBoardStates[][] defensiveBoard;
-    int hits;
+    public static final int BOARD_LENGTH = 10;
+    private int hits;
 
+    public Player(){
+        /**
+         * Initialize offensive board and defensive board to possibleBoardStates[BOARD_LENGTH][BOARD_LENGTH]
+         * Initialize ships to new arrayList<ships>
+         */
+
+    }
     /**
      * Returns a reference to the ship's offensive board.
      * @return a reference to defensive board.
@@ -107,25 +115,50 @@ public class Player implements PlayerInterface {
      * horizontal co-ordinates and according to the ships type (length) and
      * direction. The ship will be represnted by contiguous squares in the direction passsed in.
      * @param ship the type of ship to be added
-     * @param d    the enumerated direction of the ship
-     * @throws IllegalArgumentException if the arguments is out of bounds of the defensive char array (10 * 10 board) or if there already exists
-     *                                  a ship of that type (for destoryer, it will allow upto two ships of the same kind) or if the the ship can't be drawn (it can't be
+     * @throws IllegalArgumentException if the arguments is out of bounds of the defensive board (10 * 10 board) or if there already exists
+     *                                  a ship of that type  or if the the ship can't be drawn (it can't be
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
-    public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
+    public void placeShip(Ship ship) {
         /**
+         * if isPlaceShipLegal(ship) returns true, continue
+         * otherwise throw exception
          *
          */
-        // after 5 legal placements, swtich to player two
-        // aftr 10 placemnts ,swtich to player one
+        // after 5 legal placements, switch to player two
+        // after 10 placements ,switch to player one
         // any calls after this will return "cant be placed"
         //if move is legal send back the character in the 2d defensive board
 
     }
 
     // validate if placement of ship is valid
-    private boolean isPlaceShipLegal() {
-        // current player
+    private boolean isPlaceShipLegal(Ship ship) {
+        /**
+         * if ship is out of bounds of defensive board (ship.loc.col or row is <0 or >9
+         *      return false
+         *  if ship of that kind exists in the arrayList of ships
+         *      return false
+         *  initialize possibleBoardStates[][] copy to getDeeplyCopyOfDefensiveBoard
+         *      for row + dictionary.get(direction).row to row + dictionary.get(direction).row*distance
+         *          for col + dictionary.get(direction).col to col + dictionary.get(direction).row*distance
+         *              if copy[row][col] is not null
+         *                  throw exception
+         *              if direction is upper left or upper right, or down left, or down right*
+         *                  if copy[row][col - dictionary.get(direction).col] is not null & copy[row - dictionary.get(direction).row][col] is null
+         *                      throw exception
+         *              copy[row][col] = ship.type
+         *      defensiveBoard = copy
+         */
         return true;
+    }
+
+    private possibleBoardStates[][] getDeepCopyOfDefensiveBoard(){
+        /**
+         * initialize possibleBoardStates[][] copy
+         * for each row in defensive board
+         *  for each col in defensive board
+         *      copy[row][col] = defensiveBoard[row][col]*
+         */
     }
 }

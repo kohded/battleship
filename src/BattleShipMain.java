@@ -1,9 +1,26 @@
+import java.util.HashMap;
+
 public class BattleShipMain implements BattleShipMainInterface {
     Player player1 = new Player();
     Player player2 = new Player();
     int counterPlaceShip;
-    Player currentPlayer;
-    Player otherPlayer;
+    boolean currentPlayer1;
+    boolean currentPlayer2;
+    HashMap<possibleBoardStates,Integer> shipLengthDic;
+
+    Players getCurrentPlayer(){
+        /**
+         *  if currentPlayer1
+         *      return player.PLAYER1
+         *  if currentPlayer2
+         *      return player.PLAYER2
+         */
+    }
+
+    public void getShipLengthDic(){
+        if (ship)
+    }
+
     /**
      * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was madagainst it)
      * the other player.
@@ -16,7 +33,7 @@ public class BattleShipMain implements BattleShipMainInterface {
      */
     public Status makeShot(Location loc) {
         /**
-         *  initialize status to otherplayer.makerShot(loc)
+         *  initialize status = otherplayer (not current).makerShot(loc)
          *  call currentPlayer.placeResult(status,loc)
          *  if status is miss
          *      swap current player to other player
@@ -52,10 +69,19 @@ public class BattleShipMain implements BattleShipMainInterface {
     @Override
     public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
         /**
-         *
+         *  if (ship is "hit" version)
+         *      throw illegal argument exception
+         * if (counterPlaceShips is less than 5)
+         *    currentPlayer1 = true
+         *    Ship package = new Ship
+         *    package.direction = d
+         *    package.loc = loc
+         *    package.type = ship
+         *    package.length =
+         *    player1.placeShip(
          */
-        // after 5 legal placements, swtich to player two
-        // aftr 10 placemnts ,swtich to player one
+        // after 5 legal placements, switch to player two
+        // after 10 placements ,switch to player one
         // any calls after this will return "cant be placed"
         //if move is legal send back the character in the 2d defensive board
 

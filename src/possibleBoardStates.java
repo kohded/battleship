@@ -19,5 +19,7 @@ public enum possibleBoardStates {
      */
     DESTROYER,
     HIT_DESTROYER,
+    DESTROYER2,
+    HIT_DESTROYER2,
     MISS
 }

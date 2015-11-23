@@ -16,6 +16,8 @@ enum Status {
     SUNK_CRUISER,
     // return status, a hit, sunk destroyer
     SUNK_DESTROYER,
+    // return status, a hit, sunk destroyer
+    SUNK_DESTROYER2,
     // return status, location was already played or invalid
     DO_OVER,
     // return status, winner of the game

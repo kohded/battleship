@@ -1,4 +1,9 @@
+/**
+ * Created by anjeo on 11/23/2015.
+ */
 public class Ship {
-    // direction
-    //Keep track of hits and miss
+    public Direction direction;
+    public Location loc;
+    public possibleBoardStates type;
+    public int length;
 }
