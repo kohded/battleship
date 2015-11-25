@@ -9,9 +9,10 @@ public class Player implements PlayerInterface {
     possibleBoardStates[][] defensiveBoard;
     public static final int BOARD_LENGTH = 10;
     private int hits;
+
     public Player() {
         initalize(offensiveBoard);
-        ships = new ArrayList<Ship> ();
+        ships = new ArrayList<Ship>();
         initalize(defensiveBoard);
     }
 
@@ -46,9 +47,13 @@ public class Player implements PlayerInterface {
      * Returns the number of ships the player's board
      * @return number of hits
      */
-    @Override
     public int getShipsSize() {
         return ships.size();
+    }
+
+    @Override
+    public ArrayList<Ship> getShipsLeft() {
+        return ships;
     }
 
     /**
@@ -66,6 +71,14 @@ public class Player implements PlayerInterface {
         possibleBoardStates value = defensiveBoard[loc.row][loc.col];
         if(startsWithHit(value)) {
             defensiveBoard[loc.row][loc.col] = value;
+            return Status.HIT;
+        }
+        if(value == null) {
+            defensiveBoard[loc.row][loc.col] = value;
+            return Status.MISS;
+        }
+        if(isShipSunk(loc) == true) {
+            return value;
         }
 
         /*
@@ -100,6 +113,11 @@ public class Player implements PlayerInterface {
         if(state == possibleBoardStates.DESTROYER) {
             return possibleBoardStates.HIT_DESTROYER;
         }
+        if(state == possibleBoardStates.DESTROYER2) {
+            return possibleBoardStates.HIT_DESTROYER2;
+        }
+
+        return state;
     }
 
     /**
@@ -108,6 +126,23 @@ public class Player implements PlayerInterface {
      * @return true if the ship has been hit, false if it has not
      */
     private boolean isShipSunk(Location loc) {
+        possibleBoardStates value = defensiveBoard[loc.row][loc.col];
+
+        for(int i = loc.row - 1; i < loc.row + 1; i++) {
+            for(int j = loc.col - 1; j < loc.col + 1; i++) {
+                if(defensiveBoard[i][j] == value) {
+                    return false;
+                    //break;
+                }
+                else {
+                    value = defensiveBoard[i][j];
+                    //remove from array
+                    //return true;
+                }
+            }
+        }
+        return true;
+
         /*
             set value to defensiveBoard[loc.row][loc.col] "non hit version"
             set boolean sunk to true
@@ -127,6 +162,13 @@ public class Player implements PlayerInterface {
      * @return
      */
     private boolean isMakeShotLegal(Location loc) {
+        possibleBoardStates value = defensiveBoard[loc.row][loc.col];
+        if(value.equals(Status.HIT) || value.equals(Status.MISS)) {
+            return false;
+        }
+        else {
+            return true;
+        }
         /*
            set value to defensiveBoard[loc.row][loc.col]
             if value equals enum that starts with hit or is miss
@@ -134,13 +176,25 @@ public class Player implements PlayerInterface {
            else
                 return true
          */
-        return true;
     }
 
-    public void placeShotResult(Status status, Location loc) {
+
+
+
+    private Status placeShotResult(Status status, Location loc) {
+
+        if(isMakeShotLegal(loc) == false) {
+            return Status.DO_OVER;
+        }
+        if(status == Status.HIT) {
+            offensiveBoard[loc.row][loc.col] =;
+        } if(status == Status.MISS) {
+            defensiveBoard[loc.row][loc.col] =;
+        }
+
         /**
          set  value to defensiveBoard[loc.row][loc.col]
-         if isMakeShotLegal returns false
+         if isMakeShotLegal returns false //how to return state.DoOver on void
          return state.DoOver
          if status is a hit
          change offensive board at loc to the "hit" version
@@ -160,6 +214,13 @@ public class Player implements PlayerInterface {
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
     public void placeShip(Ship ship) {
+        if(isPlaceShipLegal(ship)) {
+            return true;
+        }
+        else {
+            throw new IllegalStateException();
+        }
+
         /**
          * if isPlaceShipLegal(ship) returns true, continue
          * otherwise throw exception
@@ -187,12 +248,13 @@ public class Player implements PlayerInterface {
          */
     }
 
-    private possibleBoardStates[][] getDeepCopyOfDefensiveBoard(){
+    private possibleBoardStates[][] getDeepCopyOfDefensiveBoard() {
         /**
          * initialize possibleBoardStates[][] copy
          * for each row in defensive board
          *  for each col in defensive board
          *      copy[row][col] = defensiveBoard[row][col]*
          */
+        return possibleBoardStates[][];
     }
 }
