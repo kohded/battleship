@@ -10,8 +10,8 @@ public class BattleShipMain implements BattleShipMainInterface {
     Player player1 = new Player();
     Player player2 = new Player();
     int counterPlaceShip;
-    boolean currentPlayer1;
-    boolean currentPlayer2;
+    Player currentPlayer;
+    Player otherPlayer;
     // used a hashmap for the strong correlation
     HashMap<possibleBoardStates,Integer> shipLengthDic;
 
@@ -49,6 +49,14 @@ public class BattleShipMain implements BattleShipMainInterface {
          *      swap current player to other player
          *  return status
          */
+        Status status = otherPlayer.makeShot(loc);
+        currentPlayer.placeShotResult(status,loc);
+        if(status  == status.MISS){
+            Player temp = otherPlayer;
+            otherPlayer = currentPlayer;
+            currentPlayer = temp;
+        }
+        return status;
     }
 
     /**
@@ -64,6 +72,12 @@ public class BattleShipMain implements BattleShipMainInterface {
          * else
          *      return  player2.getOffensiveBoard().[loc.row][loc.col]
          */
+
+        if(player1.equals(player)){
+            return  player1.getOffensiveBoard()[loc.row][loc.col];
+        } else {
+            return  player2.getOffensiveBoard()[loc.row][loc.col];
+        }
     }
 
     /**
@@ -95,7 +109,6 @@ public class BattleShipMain implements BattleShipMainInterface {
         // after 10 placements ,switch to player one
         // any calls after this will return "cant be placed"
         //if move is legal send back the character in the 2d defensive board
-
     }
 
     public boolean setupFinished(){

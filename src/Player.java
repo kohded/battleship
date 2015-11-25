@@ -137,7 +137,7 @@ public class Player implements PlayerInterface {
         return true;
     }
 
-    private void placeShotResult(Status status, Location loc) {
+    public void placeShotResult(Status status, Location loc) {
         /**
          set  value to defensiveBoard[loc.row][loc.col]
          if isMakeShotLegal returns false
