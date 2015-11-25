@@ -21,5 +21,6 @@ public enum possibleBoardStates {
     HIT_DESTROYER,
     DESTROYER2,
     HIT_DESTROYER2,
-    MISS
+    MISS,
+    EMPTY
 }
