@@ -4,7 +4,22 @@ public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
     possibleBoardStates[][] offensiveBoard;
     possibleBoardStates[][] defensiveBoard;
+    public static final int BOARD_LENGTH = 10;
     int hits;
+
+    public Player() {
+        initalize(offensiveBoard);
+        initalize(defensiveBoard);
+    }
+
+    private void initalize(possibleBoardStates[][] board) {
+        board = new possibleBoardStates[BOARD_LENGTH][BOARD_LENGTH];
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; i++) {
+                offensiveBoard[i][j] = possibleBoardStates.EMPTY;
+            }
+        }
+    }
 
     /**
      * Returns a reference to the ship's offensive board.
@@ -42,6 +57,14 @@ public class Player implements PlayerInterface {
      */
     @Override
     public Status makeShot(Location loc) {
+        if(isMakeShotLegal(loc)) {
+            return Status.DO_OVER;
+        }
+        possibleBoardStates value = defensiveBoard[loc.row][loc.col];
+        if(startsWithHit(value)) {
+            defensiveBoard[loc.row][loc.col] = value;
+        }
+
         /*
             set  value to defensiveBoard[loc.row][loc.col]
             if isMakeShotLegal returns false
@@ -55,12 +78,31 @@ public class Player implements PlayerInterface {
          */
     }
 
+    private boolean startsWithHit(possibleBoardStates state) {
+        return state != possibleBoardStates.HIT_AIRCRAFT || state != possibleBoardStates.HIT_BATTLESHIP || state != possibleBoardStates.HIT_CRUISER || state != possibleBoardStates.HIT_DESTROYER;
+    }
+
+    private possibleBoardStates flipped(possibleBoardStates state) {
+        if(state == possibleBoardStates.AIRCRAFT) {
+            return possibleBoardStates.HIT_AIRCRAFT;
+        }
+        if(state == possibleBoardStates.BATTLESHIP) {
+            return possibleBoardStates.HIT_BATTLESHIP;
+        }
+        if(state == possibleBoardStates.CRUISER) {
+            return possibleBoardStates.HIT_CRUISER;
+        }
+        if(state == possibleBoardStates.DESTROYER) {
+            return possibleBoardStates.HIT_DESTROYER;
+        }
+    }
+
     /**
      * Checks if a ship at a location has been sunk.
      * @param loc The designator for the shot
      * @return true if the ship has been hit, false if it has not
      */
-    private boolean isShipSunk(Location loc){
+    private boolean isShipSunk(Location loc) {
         /*
             set value to defensiveBoard[loc.row][loc.col] "non hit version"
             set boolean sunk to true
@@ -93,13 +135,13 @@ public class Player implements PlayerInterface {
         /**
          set  value to defensiveBoard[loc.row][loc.col]
          if isMakeShotLegal returns false
-                return state.DoOver
+         return state.DoOver
          if status is a hit
-                change offensive board at loc to the "hit" version
+         change offensive board at loc to the "hit" version
 
          if status is a miss
-               change defensive board at loc to miss
-        */
+         change defensive board at loc to miss
+         */
     }
 
     /**

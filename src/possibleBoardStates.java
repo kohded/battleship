@@ -19,5 +19,6 @@ public enum possibleBoardStates {
      */
     DESTROYER,
     HIT_DESTROYER,
-    MISS
+    MISS,
+    EMPTY
 }
