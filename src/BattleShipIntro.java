@@ -5,14 +5,14 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by anjeo on 11/20/2015.
+ * Represnts the view for the introduction to BattleShip
  */
 public class BattleShipIntro extends JPanel {
     public static final int SQUARE_LENGTH = 10;
     //width of board
-    public static final int WIDTH= 650;
+    public static final int WIDTH = 650;
     //length of board
-    public static final int LENGTH= 380;
+    public static final int LENGTH = 380;
 
     public JFrame getFrame() {
         return frame;
@@ -27,65 +27,40 @@ public class BattleShipIntro extends JPanel {
     playerView player2;
 
 
-    public BattleShipIntro(){
-        frame = new JFrame();
-        frame.setSize(WIDTH,LENGTH);
-        player1 = new playerView(Players.PLAYER1);
-        player2 = new playerView(Players.PLAYER2);
-        //frame.add(introPanel)
-        setSize(WIDTH,LENGTH);
-        JTextField jt = new JTextField();
-        jt.setBounds(500, 200, 100,20);
-        frame.add(player1.playerName);
-        frame.add(player2.playerName);
-        //this.add(player1.playerName);
-       // this.add(player2.playerName);
-        //this.add(textField);
-        this.setVisible(true);
-        frame.add(this);
-        frame.setVisible(true);
-        this.repaint();
-        //this.repaint();
-                /*
-                Add jpanel to jframe 9panel contaisn the name )
-                // panel should have picture and two buttons inside it for figuring out the name
-                // when another button is clicked, it should check what is niside the other buttons
-                // and decide whether to remove the jpanel or stay (will be passed in BattleShipIntro)
-                // and register all the jubttons with one action lister (call a method)
-                // this action listerne will pop player 1 jframe or the other one based on stuff
-                // then using the nmaes, pop player 1 interface.
-                // this should have a its own listener..
-                // call the same listener 5 times
-                // place 5 ships
-                // rpeat for player two
-                // remove everything from jpanel, then depending on the dediction in the game, alternate
-                 */
-
+    public BattleShipIntro() {
+        /**
+         * Initalize frame to new JFrame
+         * set size to width and length
+         * intalize player 1 to playerView (Players.PLAYER.1)
+         * intalize player 2 to playerView (Players.PLAYER.2)
+         * add player1.playerName and player2.playerName to frame
+         * add player1.promptName and player2.promptName to frame
+         * create a new JButton
+         * add this button to bottom center corner
+         * add JTextField to the left of the button that says "Click button After entering Name"
+         * register the button with the a new NameEnteredListener (this)
+         * set this "jpanel" visible
+         * add this jpanel to frame
+         * repaint to draw battleShip picture on screen
+         *
+         */
     }
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         System.out.println(2);
         Image img;
         try {
             //draws the background
             img = ImageIO.read(new File("BattleShipPicture.png"));
             g.drawImage(img, 0, 0, null);
-            //img = ImageIO.read(new File("spaceShip.png"));
-            //draws ship approximately in the bottom middle
-
-
-            //g.drawImage(img, ship.getX(), ship.getY() - 100, null);
-
-
-            //img = ImageIO.read(new File("Chicken.png"));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+}
     public static void main (String [] args){
         BattleShipIntro x  =  new BattleShipIntro();
     }

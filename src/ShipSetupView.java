@@ -1,13 +1,12 @@
-import javax.swing.*;
 
 /**
- * Created by anjeo on 11/22/2015.
+ * Represnts view  for Ship Setup.
  */
 public class ShipSetupView {
+    // we choose a Jcombox because it was user friendly and enforced the selection of specific ships
     public JComboBox<possibleBoardStates> getShips() {
         return ships;
     }
-
     public void setShips(JComboBox<possibleBoardStates> ships) {
         this.ships = ships;
     }
@@ -15,7 +14,7 @@ public class ShipSetupView {
     public JComboBox<Direction> getDirections() {
         return directions;
     }
-
+    // we choose a Jcombox because it was user friendly and enforced the selection of specific ships
     public void setDirections(JComboBox<Direction> directions) {
         this.directions = directions;
     }

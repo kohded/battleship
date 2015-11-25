@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Repersents a player for BattleShip
+ */
 public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
     possibleBoardStates[][] offensiveBoard;
@@ -33,11 +36,11 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * Returns the number of ships left on the player's board
+     * Returns the number of ships the player's board
      * @return number of hits
      */
     @Override
-    public int getShipsLeft() {
+    public int getShipsSize() {
         return ships.size();
     }
 
@@ -60,6 +63,8 @@ public class Player implements PlayerInterface {
             if value equals null
                 change defensive board at loc to miss
                 return Status.miss
+             if isShipSunk(loc) return true
+                return value
          */
     }
 
@@ -77,8 +82,9 @@ public class Player implements PlayerInterface {
                 if(defensiveBoard[row][col] == value)
                    set sunk to false
                    break
-           return sunk;
-
+           return sunk
+           set value to defensiveBoard[loc.row][loc.col] " hit version"
+           remove from array
          */
     }
 
@@ -128,12 +134,6 @@ public class Player implements PlayerInterface {
         // after 5 legal placements, switch to player two
         // after 10 placements ,switch to player one
         // any calls after this will return "cant be placed"
-        //if move is legal send back the character in the 2d defensive board
-
-    }
-
-    // validate if placement of ship is valid
-    private boolean isPlaceShipLegal(Ship ship) {
         /**
          * if ship is out of bounds of defensive board (ship.loc.col or row is <0 or >9
          *      return false
@@ -149,8 +149,8 @@ public class Player implements PlayerInterface {
          *                      throw exception
          *              copy[row][col] = ship.type
          *      defensiveBoard = copy
+         *      add ship to ships array
          */
-        return true;
     }
 
     private possibleBoardStates[][] getDeepCopyOfDefensiveBoard(){

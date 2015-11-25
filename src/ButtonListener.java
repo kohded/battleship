@@ -2,7 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by anjeo on 11/22/2015.
+ * Listener for capturing "moves" by current player
  */
 public class ButtonListener implements ActionListener {
     private BattleShipMain model;
@@ -21,7 +21,7 @@ public class ButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         /*
         get the current player from the model
-        get the Offensive board of the model of the current player
+        get the Offensive board from the view of the current player (from setup above)
         use e.getSource() to figure out which button was clicked from the offensive board of the current player
         disable the button
         use the index of the button clicked to call currentplayer.model.makeShot() and store the return of the call as "result"
@@ -32,8 +32,8 @@ public class ButtonListener implements ActionListener {
             disable all buttons of both players
             return
         if(result equals miss)
-            remove the old "current player" view's jpanel from model.frame
-            put the current player's jpanel to model.frame
+            remove this class as a listener to current player
+            add this class as a listener to other player board
         call updateOffensiveBoard and updateDefensiveBoard from each player's view and pass in the corresponding "boards" retrieved earlier
        if(result equals SUNK ???)
            pop up a menu saying what ship got sunk

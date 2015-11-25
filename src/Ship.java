@@ -1,5 +1,5 @@
 /**
- * Created by anjeo on 11/23/2015.
+ * Represents the model for a ship.
  */
 public class Ship {
     public Direction direction;

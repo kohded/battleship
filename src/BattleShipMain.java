@@ -1,11 +1,18 @@
 import java.util.HashMap;
 
+/**
+ * Represents the model for BattleShip Main. This model decides who is the current player initally
+ * by counterPlaceShip and then by changing the player depending on hit / miss. We chose this design
+ * to enforce business rules of how the game should alternate. This allowed also to not let the view access the players
+ * directly since this class took care of which board to place ship on  or make a hit on.
+ */
 public class BattleShipMain implements BattleShipMainInterface {
     Player player1 = new Player();
     Player player2 = new Player();
     int counterPlaceShip;
     boolean currentPlayer1;
     boolean currentPlayer2;
+    // used a hashmap for the strong correlation
     HashMap<possibleBoardStates,Integer> shipLengthDic;
 
     Players getCurrentPlayer(){
@@ -17,8 +24,10 @@ public class BattleShipMain implements BattleShipMainInterface {
          */
     }
 
-    public void getShipLengthDic(){
-        if (ship)
+    public void getShipLengthDic(ShipTypes type){
+        /**
+         * return shipLengthDict.get(type)
+         */
     }
 
     /**
@@ -29,10 +38,11 @@ public class BattleShipMain implements BattleShipMainInterface {
      * @param loc The designator for the shot
      * @return The status of the shot. See the status constants
      * @throws IllegalStateException    The game is not in Play Mode
-     * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board) (
+     * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
      */
     public Status makeShot(Location loc) {
-        /**
+        /** if winner() doesn't return null
+         *       throw IllegalStateException
          *  initialize status = otherplayer (not current).makerShot(loc)
          *  call currentPlayer.placeResult(status,loc)
          *  if status is miss
@@ -77,10 +87,11 @@ public class BattleShipMain implements BattleShipMainInterface {
          *    package.direction = d
          *    package.loc = loc
          *    package.type = ship
-         *    package.length =
-         *    player1.placeShip(
+         *    package.length = getShipLengthDic(ship)
+         *    player1.placeShip(package)
+         *    increment counterPlacementShip
          */
-        // after 5 legal placements, switch to player two
+        //
         // after 10 placements ,switch to player one
         // any calls after this will return "cant be placed"
         //if move is legal send back the character in the 2d defensive board
@@ -93,7 +104,16 @@ public class BattleShipMain implements BattleShipMainInterface {
            else
             return false
         */
-        return true;
+    }
+    public Players winner(){
+        /**
+         * if player1 ships are 0
+         *      return player 2
+         *  if player 2 ships are 0
+         *      return player 1
+         *   else
+         *   return null
+         */
     }
 
 }
