@@ -22,6 +22,13 @@ public class BattleShipMain implements BattleShipMainInterface {
          *  if currentPlayer2
          *      return player.PLAYER2
          */
+
+        //if(player1 = currentPlayer){
+        //  return player.PLAYER1;
+        // }
+        //if(player2 = currentPlayer){
+        //  return player.PLAYER2;
+        // }
     }
 
     public void getShipLengthDic(ShipTypes type){
@@ -106,9 +113,21 @@ public class BattleShipMain implements BattleShipMainInterface {
          *    increment counterPlacementShip
          */
         //
-        // after 10 placements ,switch to player one
-        // any calls after this will return "cant be placed"
-        //if move is legal send back the character in the 2d defensive board
+//         after 10 placements ,switch to player one
+//         any calls after this will return "cant be placed"
+//        if move is legal send back the character in the 2d defensive board
+
+        //int counterPlaceShips = 0;
+        //if(status = status.HIT){
+        //  throw new IllegalArgumentException();
+        // }
+        // if(counterPlaceShips < 5){
+        //   player1 = currentPlayer;
+        //   ////// NOT SURE HOW TO CODE PACKAGES
+        //      ....
+        //   counterPlaceChips++;
+        // }
+
     }
 
     public boolean setupFinished(){
@@ -117,6 +136,14 @@ public class BattleShipMain implements BattleShipMainInterface {
            else
             return false
         */
+
+        //check counterPlaceShips
+        //if(counterPlaceShips > 9){
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+
     }
     public Players winner(){
         /**
@@ -127,6 +154,7 @@ public class BattleShipMain implements BattleShipMainInterface {
          *   else
          *   return null
          */
+        
     }
 
 }

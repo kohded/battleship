@@ -181,7 +181,7 @@ public class Player implements PlayerInterface {
 
 
 
-    private Status placeShotResult(Status status, Location loc) {
+    public Status placeShotResult(Status status, Location loc) {
 
         if(isMakeShotLegal(loc) == false) {
             return Status.DO_OVER;
