@@ -178,9 +178,6 @@ public class Player implements PlayerInterface {
          */
     }
 
-
-
-
     private Status placeShotResult(Status status, Location loc) {
 
         if(isMakeShotLegal(loc) == false) {
@@ -214,12 +211,13 @@ public class Player implements PlayerInterface {
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
     public void placeShip(Ship ship) {
-        if(isPlaceShipLegal(ship)) {
+        if(/*isPlaceShipLegal(ship)*/) {
             return true;
         }
         else {
             throw new IllegalStateException();
         }
+
 
         /**
          * if isPlaceShipLegal(ship) returns true, continue
@@ -249,12 +247,20 @@ public class Player implements PlayerInterface {
     }
 
     private possibleBoardStates[][] getDeepCopyOfDefensiveBoard() {
+        possibleBoardStates[][] copy = defensiveBoard;
+
+        for(int i = 0; i < copy.length; i++) {
+            for(int j = 0; j < copy[i].length; i++) {
+                copy[i][j] = defensiveBoard[i][j];
+            }
+        }
+
         /**
          * initialize possibleBoardStates[][] copy
          * for each row in defensive board
          *  for each col in defensive board
          *      copy[row][col] = defensiveBoard[row][col]*
          */
-        return possibleBoardStates[][];
+        return copy;
     }
 }
