@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public interface PlayerInterface {
     /**
      * Returns a reference to the ship's offensive board.
@@ -12,12 +10,6 @@ public interface PlayerInterface {
      * @return a reference to defensive board.
      */
     public possibleBoardStates[][] getDefensiveBoard();
-
-    /**
-     * Returns the number of hits this player successfuly made on the player.
-     * @return number of hits
-     */
-    public ArrayList<Ship> getShipsLeft();
 
     /**
      * Makes a shot during Play Mode.

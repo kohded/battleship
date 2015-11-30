@@ -16,25 +16,25 @@ public class BattleShipMain implements BattleShipMainInterface {
     HashMap<possibleBoardStates,Integer> shipLengthDic;
 
     Players getCurrentPlayer(){
-        /**
-         *  if currentPlayer1
-         *      return player.PLAYER1
-         *  if currentPlayer2
-         *      return player.PLAYER2
-         */
 
-        //if(player1 = currentPlayer){
-        //  return player.PLAYER1;
-        // }
-        //if(player2 = currentPlayer){
-        //  return player.PLAYER2;
-        // }
+        if(player1 == currentPlayer){
+            return Players.PLAYER1;
+        }
+       else{
+            return Players.PLAYER2;
+        }
     }
 
-    public void getShipLengthDic(ShipTypes type){
-        /**
-         * return shipLengthDict.get(type)
-         */
+    public int getShipLengthDic(possibleBoardStates type){
+        if(shipLengthDic == null){
+            shipLengthDic = new  HashMap<possibleBoardStates,Integer>();
+            shipLengthDic.put(possibleBoardStates.AIRCRAFT,5);
+            shipLengthDic.put(possibleBoardStates.BATTLESHIP,4);
+            shipLengthDic.put(possibleBoardStates.CRUISER,3);
+            shipLengthDic.put(possibleBoardStates.DESTROYER,2);
+            shipLengthDic.put(possibleBoardStates.DESTROYER2,2);
+        }
+       return shipLengthDic.get(type);
     }
 
     /**
@@ -48,14 +48,12 @@ public class BattleShipMain implements BattleShipMainInterface {
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
      */
     public Status makeShot(Location loc) {
-        /** if winner() doesn't return null
-         *       throw IllegalStateException
-         *  initialize status = otherplayer (not current).makerShot(loc)
-         *  call currentPlayer.placeResult(status,loc)
-         *  if status is miss
-         *      swap current player to other player
-         *  return status
-         */
+        if(winner() == null ){
+            throw new IllegalArgumentException("Game is over");
+        }
+        if(otherPlayer.isMakeShotLegal(loc)) {
+            return Status.DO_OVER;
+        }
         Status status = otherPlayer.makeShot(loc);
         currentPlayer.placeShotResult(status,loc);
         if(status  == status.MISS){
@@ -64,6 +62,15 @@ public class BattleShipMain implements BattleShipMainInterface {
             currentPlayer = temp;
         }
         return status;
+        /** if winner() doesn't return null
+         *       throw IllegalStateException
+         *  initialize status = otherplayer (not current).makerShot(loc)
+         *  call currentPlayer.placeResult(status,loc)
+         *  if status is miss
+         *      swap current player to other player
+         *  return status
+         */
+
     }
 
     /**
@@ -99,6 +106,31 @@ public class BattleShipMain implements BattleShipMainInterface {
      */
     @Override
     public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
+        if(counterPlaceShip > 10){
+            throw new IllegalStateException("Setup mode is over!");
+        }
+        if(otherPlayer.notWithinBoard(loc)){
+            throw new IllegalArgumentException("location doesn't exist on board (out of bounds)");
+        }
+        if(otherPlayer.flipped(ship) == ship){
+            throw new IllegalArgumentException("ship can't be already be hit");
+        }
+        Ship pack = new Ship();
+        pack.direction = d;
+        pack.type = ship;
+        pack.length = getShipLengthDic(pack.type);
+        if(counterPlaceShip < 5){
+            player1.placeShip(pack);
+            counterPlaceShip++;
+        }
+        if(counterPlaceShip < 11){
+            player2.placeShip(pack);
+            counterPlaceShip++;
+        }
+        if(counterPlaceShip == 10){
+            currentPlayer = player1;
+            otherPlayer = player2;
+        }
         /**
          *  if (ship is "hit" version)
          *      throw illegal argument exception
@@ -116,21 +148,15 @@ public class BattleShipMain implements BattleShipMainInterface {
 //         after 10 placements ,switch to player one
 //         any calls after this will return "cant be placed"
 //        if move is legal send back the character in the 2d defensive board
-
-        //int counterPlaceShips = 0;
-        //if(status = status.HIT){
-        //  throw new IllegalArgumentException();
-        // }
-        // if(counterPlaceShips < 5){
-        //   player1 = currentPlayer;
-        //   ////// NOT SURE HOW TO CODE PACKAGES
-        //      ....
-        //   counterPlaceChips++;
-        // }
-
     }
 
     public boolean setupFinished(){
+        if (counterPlaceShip >= 10){
+            return true;
+        }
+        else{
+            return false;
+        }
         /* if (number of times place ship called is greater than 9)
             return true
            else
@@ -143,9 +169,15 @@ public class BattleShipMain implements BattleShipMainInterface {
         // } else {
         //   return false;
         // }
-
     }
     public Players winner(){
+        if(player1.getShipsSize() == 0){
+            return Players.PLAYER2;
+        }
+        if(player2.getShipsSize() == 0){
+            return Players.PLAYER1;
+        }
+        return null;
         /**
          * if player1 ships are 0
          *      return player 2
