@@ -6,7 +6,7 @@ import java.util.HashMap;
  * to enforce business rules of how the game should alternate. This allowed also to not let the view access the players
  * directly since this class took care of which board to place ship on  or make a hit on.
  */
-public class BattleShipMain implements BattleShipMainInterface {
+public class BattleShipMain {
     Player player1 = new Player();
     Player player2 = new Player();
     int counterPlaceShip;
@@ -15,6 +15,10 @@ public class BattleShipMain implements BattleShipMainInterface {
     // used a hashmap for the strong correlation
     HashMap<possibleBoardStates,Integer> shipLengthDic;
 
+    public BattleShipMain(){
+        currentPlayer = player1;
+        otherPlayer = player2;
+    }
     Players getCurrentPlayer(){
 
         if(player1 == currentPlayer){
@@ -51,48 +55,46 @@ public class BattleShipMain implements BattleShipMainInterface {
         if(winner() == null ){
             throw new IllegalArgumentException("Game is over");
         }
-        if(otherPlayer.isMakeShotLegal(loc)) {
+        if(currentPlayer.isMakeShotLegal(loc)) {
             return Status.DO_OVER;
         }
-        Status status = otherPlayer.makeShot(loc);
-        currentPlayer.placeShotResult(status,loc);
-        if(status  == status.MISS){
+        statusAndState state = otherPlayer.makeShot(loc);
+        currentPlayer.placeShotResult(state.boardValue,loc);
+        if(state.status == Status.MISS){
             Player temp = otherPlayer;
             otherPlayer = currentPlayer;
             currentPlayer = temp;
         }
-        return status;
-        /** if winner() doesn't return null
-         *       throw IllegalStateException
-         *  initialize status = otherplayer (not current).makerShot(loc)
-         *  call currentPlayer.placeResult(status,loc)
-         *  if status is miss
-         *      swap current player to other player
-         *  return status
-         */
+        return state.status;
 
     }
 
     /**
-     *  Gets the value of the board state at Location
-     *  @ param loc location where to get board state
+     *  Gets the value of the offesnive board of the player
      *  @ param player which player's board to print
      *  @ return board status at location
      */
-    public possibleBoardStates getPlayerOffBoard(Location loc, Players player) {
-        /**
-         * if player1 equals player
-         *      return  player1.getOffensiveBoard().[loc.row][loc.col]
-         * else
-         *      return  player2.getOffensiveBoard().[loc.row][loc.col]
-         */
-
+    public possibleBoardStates[][] getPlayerOffBoard(Players player) {
         if(player1.equals(player)){
-            return  player1.getOffensiveBoard()[loc.row][loc.col];
+            return  player1.getOffensiveBoard();
         } else {
-            return  player2.getOffensiveBoard()[loc.row][loc.col];
+            return  player2.getOffensiveBoard();
         }
     }
+
+    /**
+     *  Gets the value of the deffensive board of the player
+     *  @ param player which player's board to print
+     *  @ return board status at location
+     */
+    public possibleBoardStates[][] getPlayerDefBoard(Players player) {
+        if(player1.equals(player)){
+            return  player1.getDefensiveBoard();
+        } else {
+            return  player2.getDefensiveBoard();
+        }
+    }
+
 
     /**
      * Places a ship in on defensive board at the starting vertical and
@@ -104,7 +106,6 @@ public class BattleShipMain implements BattleShipMainInterface {
      *                                  a ship of that type (for destoryer, it will allow upto two ships of the same kind) or if the the ship can't be drawn (it can't be
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
-    @Override
     public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
         if(counterPlaceShip > 10){
             throw new IllegalStateException("Setup mode is over!");
@@ -131,25 +132,12 @@ public class BattleShipMain implements BattleShipMainInterface {
             currentPlayer = player1;
             otherPlayer = player2;
         }
-        /**
-         *  if (ship is "hit" version)
-         *      throw illegal argument exception
-         * if (counterPlaceShips is less than 5)
-         *    currentPlayer1 = true
-         *    Ship package = new Ship
-         *    package.direction = d
-         *    package.loc = loc
-         *    package.type = ship
-         *    package.length = getShipLengthDic(ship)
-         *    player1.placeShip(package)
-         *    increment counterPlacementShip
-         */
-        //
-//         after 10 placements ,switch to player one
-//         any calls after this will return "cant be placed"
-//        if move is legal send back the character in the 2d defensive board
     }
 
+    /**
+     * Returns whether setting up finished or not.
+     * @return set up finished or not
+     */
     public boolean setupFinished(){
         if (counterPlaceShip >= 10){
             return true;
@@ -157,36 +145,21 @@ public class BattleShipMain implements BattleShipMainInterface {
         else{
             return false;
         }
-        /* if (number of times place ship called is greater than 9)
-            return true
-           else
-            return false
-        */
-
-        //check counterPlaceShips
-        //if(counterPlaceShips > 9){
-        //   return true;
-        // } else {
-        //   return false;
-        // }
     }
+
+    /**
+     * Gets the winner of the game.
+     *
+     * @return winner
+     */
     public Players winner(){
-        if(player1.getShipsSize() == 0){
+        if(player1.getHitsLeft()== 0){
             return Players.PLAYER2;
         }
-        if(player2.getShipsSize() == 0){
+        if(player2.getHitsLeft() == 0){
             return Players.PLAYER1;
         }
         return null;
-        /**
-         * if player1 ships are 0
-         *      return player 2
-         *  if player 2 ships are 0
-         *      return player 1
-         *   else
-         *   return null
-         */
-        
     }
 
 }

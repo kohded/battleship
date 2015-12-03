@@ -6,4 +6,5 @@ public class Ship {
     public Location loc;
     public possibleBoardStates type;
     public int length;
+    public int hits;
 }
