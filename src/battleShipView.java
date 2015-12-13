@@ -54,12 +54,8 @@ public class battleShipView {
         initGetStringForState();
         initalizeStringDirection();
         Location loc = new Location();
-        System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares)," +
-                "1 Cruiser (3 squares)+ 2 Destroyers (2 squares each)");
-        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destoryer1 and D2 for destroyer 2. Also, type in the \n" +
-                "coordiante you want the ship to be placed to be starting from and direction. Possible directions are negative diagonal (reperesnted by nd), postive diagonal (pd), up (u), left (l). E.g" +
-                "Type in C,A,4,u  = This is translated to A, 4 on the board as starting value for where to place the ship. C stands for cruiser. PD means starting from " +
-                "A 4 it will place the ship diagonally (upper right) ");
+        System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares), 1 Cruiser (3 squares), 2 Destroyers (2 squares each).");
+        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by nd), postive diagonal (pd), up (u), left (l). E.g. Type in C,pd,D,1 - C stands for cruiser, pd means starting from D 1 it will place the ship diagonally (upper right), D 1 is the starting coordinate for the ship placement on the board.");
 
         Scanner input = new Scanner(System.in);
         while (!model.setupFinished()) {
@@ -212,8 +208,6 @@ public class battleShipView {
 
     }
     public static void main(String[] args) {
-        //fill();
-        //fill();
         setup();
         play();
     }
