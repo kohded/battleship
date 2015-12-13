@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -5,9 +6,10 @@ import java.util.Scanner;
  * Represents the view for BattleShip.
  */
 public class battleShipView {
-    static HashMap<String, possibleBoardStates> possibleBoardState;
-    static HashMap<possibleBoardStates,String> getStringForState;
-    static HashMap<String, Direction> stringDirection;
+    private static HashMap<String, possibleBoardStates> possibleBoardState;
+    private static HashMap<possibleBoardStates,String> getStringForState;
+    private static HashMap<String, Direction> stringDirection;
+    private static BattleShipMain model = new BattleShipMain();
 
     /**
      * Correlates characters with what state they reperesnt
@@ -35,6 +37,7 @@ public class battleShipView {
         getStringForState.put(possibleBoardStates.HIT_CRUISER, "CH");
         getStringForState.put(possibleBoardStates.HIT_DESTROYER, "D1H");
         getStringForState.put(possibleBoardStates.HIT_DESTROYER2, "D2H");
+        getStringForState.put(possibleBoardStates.HIT, "H");
     }
 
     private static void initalizeStringDirection() {
@@ -45,17 +48,18 @@ public class battleShipView {
         stringDirection.put("nd", Direction.NEGDIAGONAL);
     }
 
-    public static void main(String[] args) {
+    public static void setup(){
         initPossibleBoardState();
-         initGetStringForState();
+        initGetStringForState();
         initalizeStringDirection();
+        Location loc = new Location();
         System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares)," +
                 "1 Cruiser (3 squares)+ 2 Destroyers (2 squares each)");
-        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destoryer1 and D2 for destroyer 2. Also, type in the" +
+        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destoryer1 and D2 for destroyer 2. Also, type in the \n" +
                 "coordiante you want the ship to be placed to be starting from and direction. Possible directions are negative diagonal (reperesnted by nd), postive diagonal (pd), up (u), left (l). E.g" +
-                "Type in C,u,A,4. This is translated to A, 4 on the board as starting value for where to place the ship. C stands for cruiser. PD means starting from " +
+                "Type in C,A,4,u  = This is translated to A, 4 on the board as starting value for where to place the ship. C stands for cruiser. PD means starting from " +
                 "A 4 it will place the ship diagonally (upper right) ");
-        BattleShipMain model = new BattleShipMain();
+
         Scanner input = new Scanner(System.in);
         while (!model.setupFinished()) {
             System.out.println(model.getCurrentPlayer() + " turn to place ships");
@@ -67,38 +71,31 @@ public class battleShipView {
                 System.out.println("Try again. Input was wrong");
                 continue;
             }
-            if (possibleBoardState.containsKey(split[0])) {
-                ship.type = possibleBoardState.get(split[0]);
-            } else {
-                System.out.println("Ship doesn't exist. Try again");
+            try{
+                ship = getShipAndLocation(split);
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
                 continue;
             }
-            if (stringDirection.containsKey(split[1])) {
-                ship.direction = stringDirection.get(split[1]);
-            } else {
-                System.out.println("Direction doesn't exist. Try again");
+            try{
+                loc = getColAndRow(Arrays.copyOfRange(split,2,4));
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
                 continue;
             }
-            int row = split[2].charAt(0) - 'A';
-            if (row > 9 || row < 0) {
-                System.out.println("row is not valid");
-                System.out.println(row);
-                continue;
-            }
-            int col = Integer.parseInt(split[3]);
-            if (col > 10 || col < 1) {
-                System.out.println("col is not valid");
-                continue;
-            }
-            Location loc = new Location();
-            loc.col = col - 1;
-            loc.row = row;
             try {
                 model.placeShip(ship.type, ship.direction, loc);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public static void play(){
+        Scanner input = new Scanner(System.in);
+        Location shot  = new Location();
         while (model.winner() == null) {
             System.out.println(model.getCurrentPlayer() + " turn to make shots on other player. Type in the locaiton on the board for e.g A,4");
             printBoard(model.getPlayerOffBoard(model.getCurrentPlayer()));
@@ -108,44 +105,68 @@ public class battleShipView {
                 System.out.println("Try again. Input was wrong");
                 continue;
             }
-            int row = split[0].charAt(0) - 'A';
-            if (row > 9 || row < 0) {
-                System.out.println("row is not valid");
-                System.out.println(row);
+            try{
+                shot = getColAndRow(split);
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
                 continue;
             }
-            int col = Integer.parseInt(split[1]);
-            if (col > 10 || col < 1) {
-                System.out.println("col is not valid");
-                continue;
-            }
-            Location shot = new Location();
-            shot.row = row;
-            shot.col = col - 1;
             try {
                 Status status = model.makeShot(shot);
                 System.out.println(status);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-
-
     }
-
     /**
      * Prints the current state of the  battleship board.
      */
-    public static void printBoard(possibleBoardStates [][] board) {
+    private static void printBoard(possibleBoardStates [][] board) {
+        String lines = " ----------------------------------------";
+        printNum();
+        System.out.println();
+        System.out.println(lines);
         for (int i = 0; i < board.length; i ++) {
+            System.out.print((char) ('A' +i));
             printOneRow(board[i]);
             // will not print if its the last row
             if (i != board.length -1 ) {
-                System.out.println("---+---+---");
+                System.out.println(lines);
             }
         }
     }
+    private static Location getColAndRow(String [] rowAndCol){
+        Location loc = new Location();
+        loc.row = rowAndCol[0].charAt(0) - 'A';
+        if (loc.row > 9 || loc.row < 0) {
+            throw new IllegalArgumentException("row is not valid");
+        }
+        loc.col = Integer.parseInt(rowAndCol[1]) - 1;
+        if (loc.col > 9 || loc.col < 0) {
+            throw new IllegalArgumentException("col is not valid");
+        }
+        return loc;
+    }
 
+    private static Ship getShipAndLocation(String [] shipAndLoc){
+        Ship pack = new Ship();
+        if (possibleBoardState.containsKey(shipAndLoc[0])) {
+            pack.type = possibleBoardState.get(shipAndLoc[0]);
+        }
+        else {
+            throw new IllegalArgumentException("Ship doesn't exist. Try again");
+        }
+        if (stringDirection.containsKey(shipAndLoc[1])) {
+            pack.direction = stringDirection.get(shipAndLoc[1]);
+        }
+        else {
+            throw new IllegalArgumentException("Direction doesn't exist. Try again");
+        }
+        return pack;
+    }
     /**
      * Prints one row of the boardRow.
      *
@@ -156,16 +177,46 @@ public class battleShipView {
         for (int i = 0; i < boardRow.length; i++) {
             possibleBoardStates value = boardRow[i];
             if(value == possibleBoardStates.EMPTY){
-                System.out.print(" ");
+                System.out.print("   ");
             }
             if(getStringForState.containsKey(value)){
-                System.out.print(getStringForState.get(value));
+                System.out.print(" "+getStringForState.get(value)+" ");
             }
             // will not print if last column
-            if (i != boardRow.length -1 ) {
-                System.out.print("|");
-            }
+            System.out.print("|");
         }
         System.out.println();
     }
+
+    private static void printNum(){
+
+        for(int i=1; i<=Player.BOARD_LENGTH; i++){
+            System.out.print("  " + i + " ");
+        }
+    }
+
+    private static void testMethod(possibleBoardStates type, Direction dir, int row, int col){
+        Location x = new Location();
+        x.col = col;
+        x.row = row;
+        model.placeShip(type,dir,x);
+    }
+
+    private static void fill(){
+        testMethod(possibleBoardStates.AIRCRAFT,Direction.POSDIAGONAL,9,0);
+        testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
+        testMethod(possibleBoardStates.DESTROYER,Direction.UP,9,5);
+        testMethod(possibleBoardStates.DESTROYER2,Direction.LEFT,7,7);
+        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,9,8);
+
+    }
+    public static void main(String[] args) {
+        fill();
+        fill();
+        setup();
+        play();
+    }
+
+
+
 }

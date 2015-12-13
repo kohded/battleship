@@ -7,31 +7,32 @@ import java.util.HashMap;
  * directly since this class took care of which board to place ship on  or make a hit on.
  */
 public class BattleShipMain {
-    Player player1 = new Player();
-    Player player2 = new Player();
-    int counterPlaceShip;
-    Player currentPlayer;
-    Player otherPlayer;
-    // used a hashmap for the strong correlation
-    HashMap<possibleBoardStates,Integer> shipLengthDic;
+    private Player player1 = new Player();
+    private Player player2 = new Player();
+    private int counterPlaceShip;
+    private Player currentPlayer;
+    private Player otherPlayer;
+    // used a hashmap to create a strong correaltion between ships, and their length
+    private HashMap<possibleBoardStates,Integer> shipLengthDic;
 
     public BattleShipMain(){
         currentPlayer = player1;
         otherPlayer = player2;
+        player1.player = Players.PLAYER1;
+        player2.player = Players.PLAYER2;
     }
     Players getCurrentPlayer(){
-
         if(player1 == currentPlayer){
-            return Players.PLAYER1;
+            return player1.player;
         }
        else{
-            return Players.PLAYER2;
+            return player2.player;
         }
     }
 
     public int getShipLengthDic(possibleBoardStates type){
         if(shipLengthDic == null){
-            shipLengthDic = new  HashMap<possibleBoardStates,Integer>();
+            shipLengthDic = new  HashMap<>();
             shipLengthDic.put(possibleBoardStates.AIRCRAFT,5);
             shipLengthDic.put(possibleBoardStates.BATTLESHIP,4);
             shipLengthDic.put(possibleBoardStates.CRUISER,3);
@@ -52,18 +53,16 @@ public class BattleShipMain {
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
      */
     public Status makeShot(Location loc) {
-        if(winner() == null ){
+        if(winner() != null ){
             throw new IllegalArgumentException("Game is over");
         }
-        if(currentPlayer.isMakeShotLegal(loc)) {
+        if(!currentPlayer.isMakeShotLegal(loc)) {
             return Status.DO_OVER;
         }
         statusAndState state = otherPlayer.makeShot(loc);
         currentPlayer.placeShotResult(state.boardValue,loc);
         if(state.status == Status.MISS){
-            Player temp = otherPlayer;
-            otherPlayer = currentPlayer;
-            currentPlayer = temp;
+            switchPlayers();
         }
         return state.status;
 
@@ -75,7 +74,7 @@ public class BattleShipMain {
      *  @ return board status at location
      */
     public possibleBoardStates[][] getPlayerOffBoard(Players player) {
-        if(player1.equals(player)){
+        if(player1.player.equals(player)){
             return  player1.getOffensiveBoard();
         } else {
             return  player2.getOffensiveBoard();
@@ -88,7 +87,7 @@ public class BattleShipMain {
      *  @ return board status at location
      */
     public possibleBoardStates[][] getPlayerDefBoard(Players player) {
-        if(player1.equals(player)){
+        if(player1.player.equals(player)){
             return  player1.getDefensiveBoard();
         } else {
             return  player2.getDefensiveBoard();
@@ -107,30 +106,18 @@ public class BattleShipMain {
      *                                  drawn if the ship intersect or overlap those of any other vessel in the defensive grid)
      */
     public void placeShip(possibleBoardStates ship, Direction d, Location loc) {
-        if(counterPlaceShip > 10){
-            throw new IllegalStateException("Setup mode is over!");
-        }
-        if(otherPlayer.notWithinBoard(loc)){
-            throw new IllegalArgumentException("location doesn't exist on board (out of bounds)");
-        }
-        if(otherPlayer.flipped(ship) == ship){
-            throw new IllegalArgumentException("ship can't be already be hit");
-        }
         Ship pack = new Ship();
         pack.direction = d;
         pack.type = ship;
         pack.length = getShipLengthDic(pack.type);
-        if(counterPlaceShip < 5){
-            player1.placeShip(pack);
-            counterPlaceShip++;
-        }
-        if(counterPlaceShip < 11){
-            player2.placeShip(pack);
-            counterPlaceShip++;
+        pack.loc = loc;
+        currentPlayer.placeShip(pack);
+        counterPlaceShip++;
+        if(counterPlaceShip == 5){
+           switchPlayers();
         }
         if(counterPlaceShip == 10){
-            currentPlayer = player1;
-            otherPlayer = player2;
+            switchPlayers();
         }
     }
 
@@ -145,6 +132,11 @@ public class BattleShipMain {
         else{
             return false;
         }
+    }
+    private void switchPlayers(){
+        Player temp = otherPlayer;
+        otherPlayer = currentPlayer;
+        currentPlayer = temp;
     }
 
     /**
