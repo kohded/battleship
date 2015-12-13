@@ -211,8 +211,8 @@ public class battleShipView {
 
     }
     public static void main(String[] args) {
-        fill();
-        fill();
+        //fill();
+        //fill();
         setup();
         play();
     }
