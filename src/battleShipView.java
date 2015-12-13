@@ -25,7 +25,7 @@ public class battleShipView {
     /**
      * Correlates states with characters they reperesnt
      */
-    private static void initGetStringForState() {
+    private static void  initGetStringForState(){
         getStringForState = new HashMap<possibleBoardStates,String>();
         getStringForState.put(possibleBoardStates.AIRCRAFT, "A");
         getStringForState.put(possibleBoardStates.BATTLESHIP, "B");
@@ -38,6 +38,7 @@ public class battleShipView {
         getStringForState.put(possibleBoardStates.HIT_DESTROYER, "D1H");
         getStringForState.put(possibleBoardStates.HIT_DESTROYER2, "D2H");
         getStringForState.put(possibleBoardStates.HIT, "H");
+        getStringForState.put(possibleBoardStates.MISS, "M");
     }
 
     private static void initalizeStringDirection() {
