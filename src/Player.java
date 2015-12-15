@@ -13,6 +13,9 @@ public class Player implements PlayerInterface {
     private int hits;
     public Players player;
 
+    /**
+     * Setup for player board
+     */
     public Player() {
         offensiveBoard = new possibleBoardStates[BOARD_LENGTH][BOARD_LENGTH];
         initialize(offensiveBoard);
@@ -22,6 +25,9 @@ public class Player implements PlayerInterface {
         directionSlopeIni();
     }
 
+    /**
+     * Different directions for ship placement
+     */
     private void directionSlopeIni(){
         directionSlope = new HashMap<Direction, Location> ();
         directionSlope.put(Direction.UP, new Location(-1,0));
@@ -30,6 +36,11 @@ public class Player implements PlayerInterface {
         directionSlope.put(Direction.NEGDIAGONAL, new Location(-1,-1));
 
     }
+
+    /**
+     * Initialize the playing board
+     * @param board
+     */
     private void initialize(possibleBoardStates[][] board) {
         for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
@@ -104,10 +115,20 @@ public class Player implements PlayerInterface {
         }
     }
 
+    /**
+     * Alternate version for when player takes a turn
+     * @param state
+     * @return
+     */
     private boolean isNotHitVersion(possibleBoardStates state) {
         return !(flipped(state) == state);
     }
 
+    /**
+     * Record hits on respective ship types
+     * @param state state of ship
+     * @return state state of ship
+     */
     public possibleBoardStates flipped(possibleBoardStates state) {
         if(state == possibleBoardStates.AIRCRAFT) {
             return possibleBoardStates.HIT_AIRCRAFT;
@@ -128,6 +149,11 @@ public class Player implements PlayerInterface {
         return state;
     }
 
+    /**
+     * Reflects whether a ship was sunk
+     * @param state state of ship
+     * @return status whether ship was sunk
+     */
     public Status sunk(possibleBoardStates state) {
         if(state == possibleBoardStates.AIRCRAFT) {
             return Status.SUNK_AIRCRAFT;
@@ -158,6 +184,11 @@ public class Player implements PlayerInterface {
         return false;
     }
 
+    /**
+     * Finds board states
+     * @param dir direction
+     * @return ship or null
+     */
     private Ship find(possibleBoardStates dir){
         for(Ship x: ships){
             if(x.type == dir){
@@ -174,6 +205,11 @@ public class Player implements PlayerInterface {
        return !(notWithinBoard(loc) ||offensiveBoard[loc.col][loc.row] !=possibleBoardStates.EMPTY);
     }
 
+    /**
+     * Checks if coordinates are in bounds of grid
+     * @param loc location
+     * @return location
+     */
     public boolean notWithinBoard(Location loc){
         return loc.col >=BOARD_LENGTH || loc.col < 0 || loc.row >=BOARD_LENGTH || loc.row < 0;
     }
@@ -228,6 +264,12 @@ public class Player implements PlayerInterface {
         ships.add(ship);
     }
 
+    /**
+     * Checks acceptable placement coordinates
+     * @param loc location
+     * @param dir direction
+     * @return state of placement
+     */
     private boolean checkDiagonalPlacement(Location loc,  Direction dir){
         if(dir != Direction.POSDIAGONAL && dir!= Direction.NEGDIAGONAL){
             return true;
@@ -254,6 +296,10 @@ public class Player implements PlayerInterface {
     }
 
 
+    /**
+     * Gets updated board state
+     * @return copy of board state
+     */
     private possibleBoardStates[][] getDeepCopyOfDefensiveBoard() {
         possibleBoardStates[][] copy = new possibleBoardStates[BOARD_LENGTH][BOARD_LENGTH];
         for(int i = 0; i < copy.length; i++) {

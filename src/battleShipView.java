@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Represents the view for BattleShip.
+ * Represents the view for BattleShip
  */
 public class battleShipView {
     private static HashMap<String, possibleBoardStates> possibleBoardState;
@@ -12,7 +12,7 @@ public class battleShipView {
     private static BattleShipMain model = new BattleShipMain();
 
     /**
-     * Correlates characters with what state they reperesnt
+     * Correlates characters with the ships that they represent
      */
     private static void initPossibleBoardState() {
         possibleBoardState = new HashMap<String, possibleBoardStates>();
@@ -23,7 +23,7 @@ public class battleShipView {
         possibleBoardState.put("D2", possibleBoardStates.DESTROYER2);
     }
     /**
-     * Correlates states with characters they reperesnt
+     * Correlates various ship states with characters
      */
     private static void  initGetStringForState(){
         getStringForState = new HashMap<possibleBoardStates,String>();
@@ -41,6 +41,9 @@ public class battleShipView {
         getStringForState.put(possibleBoardStates.MISS, "M");
     }
 
+    /**
+     * Set direction for ship placement
+     */
     private static void initalizeStringDirection() {
         stringDirection = new HashMap<String, Direction>();
         stringDirection.put("u", Direction.UP);
@@ -49,6 +52,9 @@ public class battleShipView {
         stringDirection.put("nd", Direction.NEGDIAGONAL);
     }
 
+    /**
+     * Initialize Battleship game
+     */
     public static void setup(){
         initPossibleBoardState();
         initGetStringForState();
@@ -57,6 +63,9 @@ public class battleShipView {
         System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares), 1 Cruiser (3 squares), 2 Destroyers (2 squares each).");
         System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by nd), postive diagonal (pd), up (u), left (l). E.g. Type in C,pd,D,1 - C stands for cruiser, pd means starting from D 1 it will place the ship diagonally (upper right), D 1 is the starting coordinate for the ship placement on the board.");
 
+        /**
+         * Prompts players for ship placement
+         */
         Scanner input = new Scanner(System.in);
         while (!model.setupFinished()) {
             System.out.println(model.getCurrentPlayer() + " turn to place ships");
@@ -90,11 +99,14 @@ public class battleShipView {
         }
     }
 
+    /**
+     * Prompts players for moves after ships have been placed
+     */
     public static void play(){
         Scanner input = new Scanner(System.in);
         Location shot  = new Location();
         while (model.winner() == null) {
-            System.out.println(model.getCurrentPlayer() + " turn to make shots on other player. Type in the locaiton on the board for e.g A,4");
+            System.out.println(model.getCurrentPlayer() + " turn to make shots on other player. Type in the location on the board for e.g A,4");
             printBoard(model.getPlayerOffBoard(model.getCurrentPlayer()));
             String user = input.nextLine();
             String[] split = user.split(",");
@@ -119,7 +131,7 @@ public class battleShipView {
         }
     }
     /**
-     * Prints the current state of the  battleship board.
+     * Prints the current state of the  Battleship board
      */
     private static void printBoard(possibleBoardStates [][] board) {
         String lines = " ----------------------------------------";
@@ -135,6 +147,12 @@ public class battleShipView {
             }
         }
     }
+
+    /**
+     * Accesses board square input by user
+     * @param rowAndCol coordinates of player's move
+     * @return loc location of move on grid
+     */
     private static Location getColAndRow(String [] rowAndCol){
         Location loc = new Location();
         loc.row = rowAndCol[0].charAt(0) - 'A';
@@ -148,6 +166,11 @@ public class battleShipView {
         return loc;
     }
 
+    /**
+     * Places ship by direction and coordinates
+     * @param shipAndLoc board location of ship
+     * @return pack ship placement on the grid
+     */
     private static Ship getShipAndLocation(String [] shipAndLoc){
         Ship pack = new Ship();
         if (possibleBoardState.containsKey(shipAndLoc[0])) {
@@ -185,6 +208,9 @@ public class battleShipView {
         System.out.println();
     }
 
+    /**
+     * Print out coordinates showing players' moves
+     */
     private static void printNum(){
 
         for(int i=1; i<=Player.BOARD_LENGTH; i++){
@@ -192,6 +218,13 @@ public class battleShipView {
         }
     }
 
+    /**
+     * Place ships by specified coordinates
+     * @param type type of ship
+     * @param dir direction of ship placement
+     * @param row coordinate row
+     * @param col coordinate column
+     */
     private static void testMethod(possibleBoardStates type, Direction dir, int row, int col){
         Location x = new Location();
         x.col = col;
@@ -199,6 +232,9 @@ public class battleShipView {
         model.placeShip(type,dir,x);
     }
 
+    /**
+     * Establish ship coordinates within the grid
+     */
     private static void fill(){
         testMethod(possibleBoardStates.AIRCRAFT,Direction.POSDIAGONAL,9,0);
         testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
@@ -207,6 +243,11 @@ public class battleShipView {
         testMethod(possibleBoardStates.CRUISER,Direction.LEFT,9,8);
 
     }
+
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
         setup();
         play();
