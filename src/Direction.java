@@ -1,6 +1,6 @@
 enum Direction {
     /**
-     * Corresponding UP directions
+     * Corresponding UP, LEFT, POSDIAGONAL, and NEGDIAGONAL directions.
      */
     UP,
     LEFT,

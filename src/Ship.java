@@ -1,5 +1,6 @@
 /**
- * Represents the model for a ship.
+ * Represents the model for a ship with:
+ * Direction, Location, possibleBoardStates, length, and hit.
  */
 public class Ship {
     public Direction direction;

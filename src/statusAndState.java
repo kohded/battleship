@@ -1,5 +1,5 @@
 /**
- * Created by anjeo on 12/2/2015.
+ * Keeps track of the status and state of the game.
  */
 public class statusAndState {
     public Status status;

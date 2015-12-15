@@ -13,33 +13,46 @@ public class BattleShipMain {
     private Player currentPlayer;
     private Player otherPlayer;
     // used a hashmap to create a strong correaltion between ships, and their length
-    private HashMap<possibleBoardStates,Integer> shipLengthDic;
+    private HashMap<possibleBoardStates, Integer> shipLengthDic;
 
-    public BattleShipMain(){
+    /**
+     * Constructs BattleShipMain with the players
+     */
+    public BattleShipMain() {
         currentPlayer = player1;
         otherPlayer = player2;
         player1.player = Players.PLAYER1;
         player2.player = Players.PLAYER2;
     }
-    Players getCurrentPlayer(){
-        if(player1 == currentPlayer){
+
+    /**
+     * Gets the current player
+     * @return <tt>Players</tt> player1 or player2
+     */
+    Players getCurrentPlayer() {
+        if(player1 == currentPlayer) {
             return player1.player;
         }
-       else{
+        else {
             return player2.player;
         }
     }
 
-    public int getShipLengthDic(possibleBoardStates type){
-        if(shipLengthDic == null){
-            shipLengthDic = new  HashMap<>();
-            shipLengthDic.put(possibleBoardStates.AIRCRAFT,5);
-            shipLengthDic.put(possibleBoardStates.BATTLESHIP,4);
-            shipLengthDic.put(possibleBoardStates.CRUISER,3);
-            shipLengthDic.put(possibleBoardStates.DESTROYER,2);
-            shipLengthDic.put(possibleBoardStates.DESTROYER2,2);
+    /**
+     * Set ship length based on ship
+     * @param type possibleBoardStates of the ships
+     * @return <tt>int</tt> of the ships length
+     */
+    public int getShipLengthDic(possibleBoardStates type) {
+        if(shipLengthDic == null) {
+            shipLengthDic = new HashMap<>();
+            shipLengthDic.put(possibleBoardStates.AIRCRAFT, 5);
+            shipLengthDic.put(possibleBoardStates.BATTLESHIP, 4);
+            shipLengthDic.put(possibleBoardStates.CRUISER, 3);
+            shipLengthDic.put(possibleBoardStates.DESTROYER, 2);
+            shipLengthDic.put(possibleBoardStates.DESTROYER2, 2);
         }
-       return shipLengthDic.get(type);
+        return shipLengthDic.get(type);
     }
 
     /**
@@ -53,47 +66,47 @@ public class BattleShipMain {
      * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
      */
     public Status makeShot(Location loc) {
-        if(winner() != null ){
+        if(winner() != null) {
             throw new IllegalArgumentException("Game is over");
         }
         if(!currentPlayer.isMakeShotLegal(loc)) {
             return Status.DO_OVER;
         }
         statusAndState state = otherPlayer.makeShot(loc);
-        currentPlayer.placeShotResult(state.boardValue,loc);
-        if(state.status == Status.MISS){
+        currentPlayer.placeShotResult(state.boardValue, loc);
+        if(state.status == Status.MISS) {
             switchPlayers();
         }
         return state.status;
-
     }
 
     /**
-     *  Gets the value of the offesnive board of the player
-     *  @ param player which player's board to print
-     *  @ return board status at location
+     * Gets the value of the offesnive board of the player
+     * @ param player which player's board to print
+     * @ return board status at location
      */
     public possibleBoardStates[][] getPlayerOffBoard(Players player) {
-        if(player1.player.equals(player)){
-            return  player1.getOffensiveBoard();
-        } else {
-            return  player2.getOffensiveBoard();
+        if(player1.player.equals(player)) {
+            return player1.getOffensiveBoard();
+        }
+        else {
+            return player2.getOffensiveBoard();
         }
     }
 
     /**
-     *  Gets the value of the deffensive board of the player
-     *  @ param player which player's board to print
-     *  @ return board status at location
+     * Gets the value of the deffensive board of the player
+     * @ param player which player's board to print
+     * @ return board status at location
      */
     public possibleBoardStates[][] getPlayerDefBoard(Players player) {
-        if(player1.player.equals(player)){
-            return  player1.getDefensiveBoard();
-        } else {
-            return  player2.getDefensiveBoard();
+        if(player1.player.equals(player)) {
+            return player1.getDefensiveBoard();
+        }
+        else {
+            return player2.getDefensiveBoard();
         }
     }
-
 
     /**
      * Places a ship in on defensive board at the starting vertical and
@@ -113,10 +126,10 @@ public class BattleShipMain {
         pack.loc = loc;
         currentPlayer.placeShip(pack);
         counterPlaceShip++;
-        if(counterPlaceShip == 5){
-           switchPlayers();
+        if(counterPlaceShip == 5) {
+            switchPlayers();
         }
-        if(counterPlaceShip == 10){
+        if(counterPlaceShip == 10) {
             switchPlayers();
         }
     }
@@ -125,15 +138,19 @@ public class BattleShipMain {
      * Returns whether setting up finished or not.
      * @return set up finished or not
      */
-    public boolean setupFinished(){
-        if (counterPlaceShip >= 10){
+    public boolean setupFinished() {
+        if(counterPlaceShip >= 10) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-    private void switchPlayers(){
+
+    /**
+     * Switch players between player1 and player2
+     */
+    private void switchPlayers() {
         Player temp = otherPlayer;
         otherPlayer = currentPlayer;
         currentPlayer = temp;
@@ -141,17 +158,15 @@ public class BattleShipMain {
 
     /**
      * Gets the winner of the game.
-     *
      * @return winner
      */
-    public Players winner(){
-        if(player1.getHitsLeft()== 0){
+    public Players winner() {
+        if(player1.getHitsLeft() == 0) {
             return Players.PLAYER2;
         }
-        if(player2.getHitsLeft() == 0){
+        if(player2.getHitsLeft() == 0) {
             return Players.PLAYER1;
         }
         return null;
     }
-
 }

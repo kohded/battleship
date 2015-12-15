@@ -15,12 +15,18 @@ public enum possibleBoardStates {
     CRUISER,
     HIT_CRUISER,
     /**
-     * Destroyer Ship.
+     * Destroyer Ship 1.
      */
     DESTROYER,
     HIT_DESTROYER,
+    /**
+     * Destroyer Ship 2.
+     */
     DESTROYER2,
     HIT_DESTROYER2,
+    /**
+     * MISS, HIT, EMPTY
+     */
     MISS,
     HIT,
     EMPTY
