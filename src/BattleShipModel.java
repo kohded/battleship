@@ -6,7 +6,7 @@ import java.util.HashMap;
  * to enforce business rules of how the game should alternate. This allowed also to not let the view access the players
  * directly since this class took care of which board to place ship on  or make a hit on.
  */
-public class BattleShipMain {
+public class BattleShipModel {
     private Player player1 = new Player();
     private Player player2 = new Player();
     private int counterPlaceShip;
@@ -16,9 +16,9 @@ public class BattleShipMain {
     private HashMap<possibleBoardStates, Integer> shipLengthDic;
 
     /**
-     * Constructs BattleShipMain with the players
+     * Constructs BattleShipModel with the players
      */
-    public BattleShipMain() {
+    public BattleShipModel() {
         currentPlayer = player1;
         otherPlayer = player2;
         player1.player = Players.PLAYER1;

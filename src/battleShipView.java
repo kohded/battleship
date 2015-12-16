@@ -9,7 +9,7 @@ public class battleShipView {
     private static HashMap<String, possibleBoardStates> possibleBoardState;
     private static HashMap<possibleBoardStates,String> getStringForState;
     private static HashMap<String, Direction> stringDirection;
-    private static BattleShipMain model = new BattleShipMain();
+    private static BattleShipModel model = new BattleShipModel();
 
     /**
      * Correlates characters with the ships that they represent
@@ -32,11 +32,6 @@ public class battleShipView {
         getStringForState.put(possibleBoardStates.CRUISER, "C");
         getStringForState.put(possibleBoardStates.DESTROYER, "D1");
         getStringForState.put(possibleBoardStates.DESTROYER2, "D2");
-        getStringForState.put(possibleBoardStates.HIT_AIRCRAFT, "AH");
-        getStringForState.put(possibleBoardStates.HIT_BATTLESHIP, "BH");
-        getStringForState.put(possibleBoardStates.HIT_CRUISER, "CH");
-        getStringForState.put(possibleBoardStates.HIT_DESTROYER, "D1H");
-        getStringForState.put(possibleBoardStates.HIT_DESTROYER2, "D2H");
         getStringForState.put(possibleBoardStates.HIT, "H");
         getStringForState.put(possibleBoardStates.MISS, "M");
     }
@@ -46,10 +41,10 @@ public class battleShipView {
      */
     private static void initalizeStringDirection() {
         stringDirection = new HashMap<String, Direction>();
-        stringDirection.put("u", Direction.UP);
-        stringDirection.put("l", Direction.LEFT);
-        stringDirection.put("pd", Direction.POSDIAGONAL);
-        stringDirection.put("nd", Direction.NEGDIAGONAL);
+        stringDirection.put("U", Direction.UP);
+        stringDirection.put("L", Direction.LEFT);
+        stringDirection.put("PD", Direction.POSDIAGONAL);
+        stringDirection.put("ND", Direction.NEGDIAGONAL);
     }
 
     /**
@@ -61,15 +56,24 @@ public class battleShipView {
         initalizeStringDirection();
         Location loc = new Location();
         System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares), 1 Cruiser (3 squares), 2 Destroyers (2 squares each).");
-        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by nd), postive diagonal (pd), up (u), left (l). E.g. Type in C,pd,D,1 - C stands for cruiser, pd means starting from D 1 it will place the ship diagonally (upper right), D 1 is the starting coordinate for the ship placement on the board.");
-
+        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). " +
+                "Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by ND), " +
+                "postive diagonal (PD), up (U), left (L). E.g. Type in C,pd,D,1 - C stands for cruiser, PD means starting from D 1 it will place the ship diagonally (upper right)," +
+                " D 1 is the starting coordinate for the ship placement on the board.");
         /**
          * Prompts players for ship placement
          */
         Scanner input = new Scanner(System.in);
+        boolean player1Done = false;
         while (!model.setupFinished()) {
-            System.out.println(model.getCurrentPlayer() + " turn to place ships");
-            Ship ship = new Ship();
+            Players currentPlayer = model.getCurrentPlayer();
+            if(currentPlayer!= Players.PLAYER1 && !player1Done){
+                System.out.println("Player 1 is done putting ships. This is what player's one board looks like");
+                printBoard(model.getPlayerDefBoard(Players.PLAYER1));
+                player1Done = true;
+            }
+            Ship ship;
+            System.out.println(currentPlayer+ " turn to place ships");
             printBoard(model.getPlayerDefBoard(model.getCurrentPlayer()));
             String user = input.nextLine();
             String[] split = user.split(",");
@@ -97,6 +101,8 @@ public class battleShipView {
                 System.out.println(e.getMessage());
             }
         }
+        System.out.println("Setup is finished. This is what players two's defensive board looks like");
+        printBoard(model.getPlayerDefBoard(Players.PLAYER2));
     }
 
     /**
@@ -129,6 +135,7 @@ public class battleShipView {
                 System.out.println(e.getMessage());
             }
         }
+        System.out.println(model.winner() + " Congratulations! You are the winner!");
     }
     /**
      * Prints the current state of the  Battleship board
@@ -244,12 +251,40 @@ public class battleShipView {
 
     }
 
+    public static Location testGameOver(int row, int col){
+        Location x = new Location();
+        x.row = row;
+        x.col = col;
+        return x;
+    }
+    private static void hitter(){
+        model.makeShot(testGameOver(9,0));
+        model.makeShot(testGameOver(8,1));
+        model.makeShot(testGameOver(7,2));
+        model.makeShot(testGameOver(6,3));
+        model.makeShot(testGameOver(5,4));
+        model.makeShot(testGameOver(4,4));
+        model.makeShot(testGameOver(3,3));
+        model.makeShot(testGameOver(2,2));
+        model.makeShot(testGameOver(1,1));
+        model.makeShot(testGameOver(9,5));
+        model.makeShot(testGameOver(8,5));
+        model.makeShot(testGameOver(7,7));
+        model.makeShot(testGameOver(7,6));
+        model.makeShot(testGameOver(9,6));
+        model.makeShot(testGameOver(9,7));
+        model.makeShot(testGameOver(9,8));
+       // model.makeShot(testGameOver(9,8));
+    }
     /**
      * Main method
      * @param args
      */
     public static void main(String[] args) {
+        fill();
+        fill();
         setup();
+        hitter();
         play();
     }
 

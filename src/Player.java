@@ -295,7 +295,6 @@ public class Player implements PlayerInterface {
                 defensiveBoard[checkSecond.row][checkSecond.col] == possibleBoardStates.EMPTY;
     }
 
-
     /**
      * Gets updated board state
      * @return copy of board state
