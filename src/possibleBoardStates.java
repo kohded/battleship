@@ -2,8 +2,8 @@ public enum possibleBoardStates {
     /**
      * Aircraft.
      */
-    AIRCRAFT,
-    HIT_AIRCRAFT,
+    AIRCRAFT_CARRIER,
+    HIT_AIRCRAFT_CARRIER,
     /**
      * Battleship.
      */

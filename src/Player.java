@@ -8,7 +8,7 @@ public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
     possibleBoardStates[][] offensiveBoard;
     possibleBoardStates[][] defensiveBoard;
-    public static final int BOARD_LENGTH = 10;
+    public static int BOARD_LENGTH;
     private HashMap<Direction, Location> directionSlope;
     private int hits;
     public Players player;
@@ -16,7 +16,8 @@ public class Player implements PlayerInterface {
     /**
      * Setup for player board
      */
-    public Player() {
+    public Player(int length) {
+        BOARD_LENGTH = length;
         offensiveBoard = new possibleBoardStates[BOARD_LENGTH][BOARD_LENGTH];
         initialize(offensiveBoard);
         ships = new ArrayList<Ship>();
@@ -130,8 +131,8 @@ public class Player implements PlayerInterface {
      * @return state state of ship
      */
     public possibleBoardStates flipped(possibleBoardStates state) {
-        if(state == possibleBoardStates.AIRCRAFT) {
-            return possibleBoardStates.HIT_AIRCRAFT;
+        if(state == possibleBoardStates.AIRCRAFT_CARRIER) {
+            return possibleBoardStates.HIT_AIRCRAFT_CARRIER;
         }
         if(state == possibleBoardStates.BATTLESHIP) {
             return possibleBoardStates.HIT_BATTLESHIP;
@@ -155,7 +156,7 @@ public class Player implements PlayerInterface {
      * @return status whether ship was sunk
      */
     public Status sunk(possibleBoardStates state) {
-        if(state == possibleBoardStates.AIRCRAFT) {
+        if(state == possibleBoardStates.AIRCRAFT_CARRIER) {
             return Status.SUNK_AIRCRAFT;
         }
         if(state == possibleBoardStates.BATTLESHIP) {
@@ -291,7 +292,7 @@ public class Player implements PlayerInterface {
         if(notWithinBoard(checkSecond)){
             return true;
         }
-        return defensiveBoard[checkFirstPoint.row][checkFirstPoint.row] == possibleBoardStates.EMPTY ||
+        return defensiveBoard[checkFirstPoint.row][checkFirstPoint.col] == possibleBoardStates.EMPTY ||
                 defensiveBoard[checkSecond.row][checkSecond.col] == possibleBoardStates.EMPTY;
     }
 

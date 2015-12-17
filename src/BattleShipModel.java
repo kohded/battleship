@@ -7,8 +7,9 @@ import java.util.HashMap;
  * directly since this class took care of which board to place ship on  or make a hit on.
  */
 public class BattleShipModel {
-    private Player player1 = new Player();
-    private Player player2 = new Player();
+    ConfigLoader config;
+    private Player player1;
+    private Player player2;
     private int counterPlaceShip;
     private Player currentPlayer;
     private Player otherPlayer;
@@ -18,7 +19,9 @@ public class BattleShipModel {
     /**
      * Constructs BattleShipModel with the players
      */
-    public BattleShipModel() {
+    public BattleShipModel(ConfigLoader config) {
+        player1 = new Player(config.getLength());
+        player2 = new Player(config.getLength());
         currentPlayer = player1;
         otherPlayer = player2;
         player1.player = Players.PLAYER1;
@@ -46,7 +49,7 @@ public class BattleShipModel {
     public int getShipLengthDic(possibleBoardStates type) {
         if(shipLengthDic == null) {
             shipLengthDic = new HashMap<>();
-            shipLengthDic.put(possibleBoardStates.AIRCRAFT, 5);
+            shipLengthDic.put(possibleBoardStates.AIRCRAFT_CARRIER, 5);
             shipLengthDic.put(possibleBoardStates.BATTLESHIP, 4);
             shipLengthDic.put(possibleBoardStates.CRUISER, 3);
             shipLengthDic.put(possibleBoardStates.DESTROYER, 2);
@@ -74,7 +77,10 @@ public class BattleShipModel {
         }
         statusAndState state = otherPlayer.makeShot(loc);
         currentPlayer.placeShotResult(state.boardValue, loc);
-        if(state.status == Status.MISS) {
+        if(config.isSwitchEveryShot()){
+            switchPlayers();
+        }
+        else if(state.status == Status.MISS) {
             switchPlayers();
         }
         return state.status;
@@ -126,10 +132,10 @@ public class BattleShipModel {
         pack.loc = loc;
         currentPlayer.placeShip(pack);
         counterPlaceShip++;
-        if(counterPlaceShip == 5) {
+        if(counterPlaceShip == config.getAllowedShips().size()) {
             switchPlayers();
         }
-        if(counterPlaceShip == 10) {
+        if(counterPlaceShip == config.getAllowedShips().size() * 2) {
             switchPlayers();
         }
     }
@@ -139,7 +145,7 @@ public class BattleShipModel {
      * @return set up finished or not
      */
     public boolean setupFinished() {
-        if(counterPlaceShip >= 10) {
+        if(counterPlaceShip >= config.getAllowedShips().size()*2) {
             return true;
         }
         else {

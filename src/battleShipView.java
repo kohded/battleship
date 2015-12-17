@@ -9,25 +9,31 @@ public class battleShipView {
     private static HashMap<String, possibleBoardStates> possibleBoardState;
     private static HashMap<possibleBoardStates,String> getStringForState;
     private static HashMap<String, Direction> stringDirection;
-    private static BattleShipModel model = new BattleShipModel();
-
+    private static BattleShipModel model;
+    private static ConfigLoader config;
     /**
      * Correlates characters with the ships that they represent
      */
     private static void initPossibleBoardState() {
         possibleBoardState = new HashMap<String, possibleBoardStates>();
-        possibleBoardState.put("A", possibleBoardStates.AIRCRAFT);
-        possibleBoardState.put("B", possibleBoardStates.BATTLESHIP);
-        possibleBoardState.put("C", possibleBoardStates.CRUISER);
-        possibleBoardState.put("D1", possibleBoardStates.DESTROYER);
-        possibleBoardState.put("D2", possibleBoardStates.DESTROYER2);
+        mapShipToString("A", possibleBoardStates.AIRCRAFT_CARRIER);
+        mapShipToString("B", possibleBoardStates.BATTLESHIP);
+        mapShipToString("C", possibleBoardStates.CRUISER);
+        mapShipToString("D1", possibleBoardStates.DESTROYER);
+        mapShipToString("D2", possibleBoardStates.DESTROYER2);
+    }
+
+    private static void mapShipToString(String rep, possibleBoardStates state){
+        if(config.getAllowedShips().contains(state)){
+            possibleBoardState.put(rep,state);
+        }
     }
     /**
      * Correlates various ship states with characters
      */
     private static void  initGetStringForState(){
         getStringForState = new HashMap<possibleBoardStates,String>();
-        getStringForState.put(possibleBoardStates.AIRCRAFT, "A");
+        getStringForState.put(possibleBoardStates.AIRCRAFT_CARRIER, "A");
         getStringForState.put(possibleBoardStates.BATTLESHIP, "B");
         getStringForState.put(possibleBoardStates.CRUISER, "C");
         getStringForState.put(possibleBoardStates.DESTROYER, "D1");
@@ -43,14 +49,18 @@ public class battleShipView {
         stringDirection = new HashMap<String, Direction>();
         stringDirection.put("U", Direction.UP);
         stringDirection.put("L", Direction.LEFT);
-        stringDirection.put("PD", Direction.POSDIAGONAL);
-        stringDirection.put("ND", Direction.NEGDIAGONAL);
+        if(config.isDiagonalAllowed()) {
+            stringDirection.put("PD", Direction.POSDIAGONAL);
+            stringDirection.put("ND", Direction.NEGDIAGONAL);
+        }
     }
 
     /**
      * Initialize Battleship game
      */
     public static void setup(){
+        config = new ConfigLoader("funorama.bshp.txt");
+        model = new BattleShipModel(config);
         initPossibleBoardState();
         initGetStringForState();
         initalizeStringDirection();
@@ -141,7 +151,10 @@ public class battleShipView {
      * Prints the current state of the  Battleship board
      */
     private static void printBoard(possibleBoardStates [][] board) {
-        String lines = " ----------------------------------------";
+        String lines =" ";
+       for (int i = 0; i< Player.BOARD_LENGTH; i++){
+           lines += "----";
+       }
         printNum();
         System.out.println();
         System.out.println(lines);
@@ -163,11 +176,11 @@ public class battleShipView {
     private static Location getColAndRow(String [] rowAndCol){
         Location loc = new Location();
         loc.row = rowAndCol[0].charAt(0) - 'A';
-        if (loc.row > 9 || loc.row < 0) {
+        if (loc.row >  Player.BOARD_LENGTH -1 || loc.row < 0) {
             throw new IllegalArgumentException("row is not valid");
         }
         loc.col = Integer.parseInt(rowAndCol[1]) - 1;
-        if (loc.col > 9 || loc.col < 0) {
+        if (loc.col >  Player.BOARD_LENGTH -1 || loc.col < 0) {
             throw new IllegalArgumentException("col is not valid");
         }
         return loc;
@@ -243,11 +256,13 @@ public class battleShipView {
      * Establish ship coordinates within the grid
      */
     private static void fill(){
-        testMethod(possibleBoardStates.AIRCRAFT,Direction.POSDIAGONAL,9,0);
+        config = new ConfigLoader("funorama.bshp.txt");
+        model = new BattleShipModel(config);
+        testMethod(possibleBoardStates.AIRCRAFT_CARRIER,Direction.POSDIAGONAL,8,0);
         testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
-        testMethod(possibleBoardStates.DESTROYER,Direction.UP,9,5);
+        testMethod(possibleBoardStates.DESTROYER,Direction.UP,8,5);
         testMethod(possibleBoardStates.DESTROYER2,Direction.LEFT,7,7);
-        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,9,8);
+        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,8,8);
 
     }
 
@@ -276,15 +291,45 @@ public class battleShipView {
         model.makeShot(testGameOver(9,8));
        // model.makeShot(testGameOver(9,8));
     }
+
+    private static void hitterTwo(){
+        model.makeShot(testGameOver(8,0));
+        model.makeShot(testGameOver(7,1));
+        model.makeShot(testGameOver(7,2));
+        model.makeShot(testGameOver(6,3));
+        model.makeShot(testGameOver(5,4));
+        model.makeShot(testGameOver(4,4));
+        model.makeShot(testGameOver(3,3));
+        model.makeShot(testGameOver(2,2));
+        model.makeShot(testGameOver(1,1));
+        model.makeShot(testGameOver(8,5));
+        model.makeShot(testGameOver(7,5));
+        model.makeShot(testGameOver(7,7));
+        model.makeShot(testGameOver(7,6));
+        model.makeShot(testGameOver(8,6));
+        model.makeShot(testGameOver(8,7));
+        model.makeShot(testGameOver(8,8));
+        // model.makeShot(testGameOver(9,8));
+    }
+    /**
+     * Establish ship coordinates within the grid
+     */
+    private static void fill8(){
+        config = new ConfigLoader("funorama.bshp.txt");
+        model = new BattleShipModel(config);
+        testMethod(possibleBoardStates.AIRCRAFT_CARRIER,Direction.POSDIAGONAL,8,0);
+        testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
+        testMethod(possibleBoardStates.DESTROYER,Direction.UP,8,5);
+        testMethod(possibleBoardStates.DESTROYER2,Direction.LEFT,7,7);
+        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,8,8);
+
+    }
     /**
      * Main method
      * @param args
      */
     public static void main(String[] args) {
-        fill();
-        fill();
         setup();
-        hitter();
         play();
     }
 
