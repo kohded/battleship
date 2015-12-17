@@ -68,7 +68,7 @@ public class battleShipView {
         System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares), 1 Cruiser (3 squares), 2 Destroyers (2 squares each).");
         System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). " +
                 "Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by ND), " +
-                "postive diagonal (PD), up (U), left (L). E.g. Type in C,PD,D,1 - C stands for cruiser, PD means starting from D 1 it will place the ship diagonally (upper right)," +
+                "postive diagonal (PD), up (U), left (L). E.g. Type in C,pd,D,1 - C stands for cruiser, PD means starting from D 1 it will place the ship diagonally (upper right)," +
                 " D 1 is the starting coordinate for the ship placement on the board.");
         /**
          * Prompts players for ship placement

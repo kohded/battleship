@@ -249,7 +249,7 @@ public class Player implements PlayerInterface {
         loc.row = ship.loc.row;
         while(size-- > 0) {
             if(notWithinBoard(loc)){
-                throw new IllegalArgumentException("Ship out of board");
+                throw new IllegalArgumentException("Ship out of board)");
             }
             if(copy[loc.row][loc.col] != possibleBoardStates.EMPTY){
                 throw new IllegalArgumentException("Ship can't be placed because a ships can't overlap (another ship exists on the path)");
