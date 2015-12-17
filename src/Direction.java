@@ -1,9 +1,13 @@
 enum Direction {
     /**
-     * Corresponding UP, LEFT, POSDIAGONAL, and NEGDIAGONAL directions.
+     * Corresponding UP, LEFT, UPPER_LEFT_DIAGONAL, and UPPER_RIGHT_DIAGONAL, LOWER_LEFT_DIAGONAL, LOWER_RIGHT_DIAGONAL directions.
      */
     UP,
+    DOWN,
     LEFT,
-    POSDIAGONAL,
-    NEGDIAGONAL
+    RIGHT,
+    UPPER_LEFT_DIAGONAL,
+    UPPER_RIGHT_DIAGONAL,
+    LOWER_LEFT_DIAGONAL,
+    LOWER_RIGHT_DIAGONAL
 }

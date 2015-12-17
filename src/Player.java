@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Represents a player for BattleShip
+ * Represents an implementation  for player for BattleShip which keeps track of its boards and ships.
+ * @author Endrias Kahssay
+ * @author Arnold Koh
+ * @author Russell Schneider
  */
 public class Player implements PlayerInterface {
     ArrayList<Ship> ships;
@@ -33,9 +36,12 @@ public class Player implements PlayerInterface {
         directionSlope = new HashMap<Direction, Location> ();
         directionSlope.put(Direction.UP, new Location(-1,0));
         directionSlope.put(Direction.LEFT, new Location(0,-1));
-        directionSlope.put(Direction.POSDIAGONAL, new Location(-1,1));
-        directionSlope.put(Direction.NEGDIAGONAL, new Location(-1,-1));
-
+        directionSlope.put(Direction.UPPER_RIGHT_DIAGONAL, new Location(-1,1));
+        directionSlope.put(Direction.UPPER_LEFT_DIAGONAL, new Location(-1,-1));
+        directionSlope.put(Direction.RIGHT, new Location(0,1));
+        directionSlope.put(Direction.DOWN, new Location(1,0));
+        directionSlope.put(Direction.LOWER_LEFT_DIAGONAL, new Location(1,-1));
+        directionSlope.put(Direction.LOWER_RIGHT_DIAGONAL, new Location(1,1));
     }
 
     /**
@@ -76,6 +82,10 @@ public class Player implements PlayerInterface {
         int hitsLeft = 0;
         for( Ship s: ships){
             hitsLeft +=  s.length - s.hits;
+        }
+        if(ships.size() == 0)
+        {
+            hitsLeft = 1;
         }
         return hitsLeft;
     }
@@ -146,6 +156,15 @@ public class Player implements PlayerInterface {
         if(state == possibleBoardStates.DESTROYER2) {
             return possibleBoardStates.HIT_DESTROYER2;
         }
+        if(state == possibleBoardStates.SUBMARINE) {
+            return possibleBoardStates.HIT_SUBMARINE;
+        }
+        if(state == possibleBoardStates.MINI_SUBMARINE) {
+            return possibleBoardStates.HIT_MINI_SUBMARINE;
+        }
+        if(state == possibleBoardStates.MINI_SUBMARINE2) {
+            return possibleBoardStates.HIT_MINI_SUBMARINE2;
+        }
 
         return state;
     }
@@ -168,7 +187,16 @@ public class Player implements PlayerInterface {
         if(state == possibleBoardStates.DESTROYER) {
             return Status.SUNK_DESTROYER;
         }
-        else  {
+        if(state == possibleBoardStates.SUBMARINE) {
+            return Status.SUNK_SUBMARINE;
+        }
+        if(state == possibleBoardStates.MINI_SUBMARINE) {
+            return Status.SUNK_MINI_SUBMARINE;
+        }
+        if(state == possibleBoardStates.MINI_SUBMARINE2) {
+            return Status.SUNK_MINI_SUBMARINE2;
+        }
+        else {
             return Status.SUNK_DESTROYER2;
         }
     }
@@ -215,7 +243,11 @@ public class Player implements PlayerInterface {
         return loc.col >=BOARD_LENGTH || loc.col < 0 || loc.row >=BOARD_LENGTH || loc.row < 0;
     }
 
-
+    /**
+     * Place the results of as shot on the offensive board.
+     * @param result - result
+     * @param loc - location
+     */
     public void placeShotResult(possibleBoardStates result, Location loc) {
         if(offensiveBoard[loc.row][loc.col] != possibleBoardStates.EMPTY){
             throw new IllegalArgumentException("Argument is not valid");
@@ -249,13 +281,13 @@ public class Player implements PlayerInterface {
         loc.row = ship.loc.row;
         while(size-- > 0) {
             if(notWithinBoard(loc)){
-                throw new IllegalArgumentException("Ship out of board)");
+                throw new IllegalArgumentException("Ship out of board.");
             }
             if(copy[loc.row][loc.col] != possibleBoardStates.EMPTY){
-                throw new IllegalArgumentException("Ship can't be placed because a ships can't overlap (another ship exists on the path)");
+                throw new IllegalArgumentException("Ship can't be placed because ships can't overlap (another ship exists on the path)");
             }
-            if(!checkDiagonalPlacement(loc,ship.direction)){
-                throw new IllegalArgumentException("Ship can't be cross over each other ");
+            if(!CheckUpperDiagonal(loc, ship.direction) || !checkLowerDiagonal(loc, ship.direction)){
+                throw new IllegalArgumentException("Ship can't cross over each other ");
             }
             copy[loc.row][loc.col] = ship.type;
             loc.row += directionSlope.get(ship.direction).row;
@@ -266,13 +298,13 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * Checks acceptable placement coordinates
+     * Checks that the ship will not cross diagonally (upper).
      * @param loc location
      * @param dir direction
      * @return state of placement
      */
-    private boolean checkDiagonalPlacement(Location loc,  Direction dir){
-        if(dir != Direction.POSDIAGONAL && dir!= Direction.NEGDIAGONAL){
+    private boolean CheckUpperDiagonal(Location loc,  Direction dir){
+        if(dir != Direction.UPPER_LEFT_DIAGONAL && dir!= Direction.UPPER_RIGHT_DIAGONAL){
             return true;
         }
         Location checkFirstPoint = new Location();
@@ -283,7 +315,7 @@ public class Player implements PlayerInterface {
             return true;
         }
         checkSecond.row = loc.row;
-        if(dir == Direction.POSDIAGONAL){
+        if(dir == Direction.UPPER_LEFT_DIAGONAL){
             checkSecond.col = loc.col + 1;
         }
         else{
@@ -295,9 +327,38 @@ public class Player implements PlayerInterface {
         return defensiveBoard[checkFirstPoint.row][checkFirstPoint.col] == possibleBoardStates.EMPTY ||
                 defensiveBoard[checkSecond.row][checkSecond.col] == possibleBoardStates.EMPTY;
     }
-
     /**
-     * Gets updated board state
+     * Checks that the ship will not cross diagonally (lower).
+     * @param loc location
+     * @param dir direction
+     * @return state of placement
+     */
+    private boolean checkLowerDiagonal(Location loc,  Direction dir){
+        if(dir != Direction.LOWER_LEFT_DIAGONAL && dir!= Direction.LOWER_RIGHT_DIAGONAL){
+            return true;
+        }
+        Location checkFirstPoint = new Location();
+        Location checkSecond = new Location();
+        checkFirstPoint.col = loc.col;
+        checkFirstPoint.row = loc.row + 1;
+        if(notWithinBoard(checkFirstPoint)){
+            return true;
+        }
+        checkSecond.row = loc.row;
+        if(dir == Direction.LOWER_RIGHT_DIAGONAL){
+            checkSecond.col = loc.col + 1;
+        }
+        else{
+            checkSecond.col = loc.col - 1;
+        }
+        if(notWithinBoard(checkSecond)){
+            return true;
+        }
+        return defensiveBoard[checkFirstPoint.row][checkFirstPoint.col] == possibleBoardStates.EMPTY ||
+                defensiveBoard[checkSecond.row][checkSecond.col] == possibleBoardStates.EMPTY;
+    }
+    /**
+     * Gets updated board state.
      * @return copy of board state
      */
     private possibleBoardStates[][] getDeepCopyOfDefensiveBoard() {

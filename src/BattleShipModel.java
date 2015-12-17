@@ -1,10 +1,13 @@
 import java.util.HashMap;
-
 /**
  * Represents the model for BattleShip Main. This model decides who is the current player initally
- * by counterPlaceShip and then by changing the player depending on hit / miss. We chose this design
+ * by counterPlaceShip (during setup mode) and then by changing the player depending on hit / miss. We chose this design
  * to enforce business rules of how the game should alternate. This allowed also to not let the view access the players
- * directly since this class took care of which board to place ship on  or make a hit on.
+ * directly since this class took care of which board to place ship on or make a hit on.
+ * @author Endrias Kahssay
+ * @author Arnold Koh
+ * @author Russell Schneider
+ *
  */
 public class BattleShipModel {
     ConfigLoader config;
@@ -20,8 +23,9 @@ public class BattleShipModel {
      * Constructs BattleShipModel with the players
      */
     public BattleShipModel(ConfigLoader config) {
-        player1 = new Player(config.getLength());
-        player2 = new Player(config.getLength());
+        this.config = config;
+        player1 = new Player(this.config.getLength());
+        player2 = new Player(this.config.getLength());
         currentPlayer = player1;
         otherPlayer = player2;
         player1.player = Players.PLAYER1;
@@ -42,7 +46,7 @@ public class BattleShipModel {
     }
 
     /**
-     * Set ship length based on ship
+     * Correlates ship length to ship
      * @param type possibleBoardStates of the ships
      * @return <tt>int</tt> of the ships length
      */
@@ -54,23 +58,34 @@ public class BattleShipModel {
             shipLengthDic.put(possibleBoardStates.CRUISER, 3);
             shipLengthDic.put(possibleBoardStates.DESTROYER, 2);
             shipLengthDic.put(possibleBoardStates.DESTROYER2, 2);
+            shipLengthDic.put(possibleBoardStates.SUBMARINE,3);
+            shipLengthDic.put(possibleBoardStates.MINI_SUBMARINE,1);
+            shipLengthDic.put(possibleBoardStates.MINI_SUBMARINE2,1);
         }
         return shipLengthDic.get(type);
     }
 
     /**
-     * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was madagainst it)
+     * Makes a shot during Play Mode of one player, marking the defensive board of the player ( a shot was made against it)
      * the other player.
      * For example, one player (A) makes a "shot" a some location on the board, designated by a letter (A-J) and a number (1-10).
-     * The corresponding location on other player's (B's) defensive grid is checked for a vessel in that square. T
+     * The corresponding location on other player's (B's) defensive grid is checked for a vessel in that square.
+     * The outcome of the play is a "hit" or "miss" reported back to the player A.
+     * The return status of the "shot" is recorded on A's offensive grid. All "hits" are recorded on B's defensive grid.
+     * If the "hit" marks the final unmarked square for a vessel, the "hit" return status includes an indication of the vessel type which has been sunk.
+     * How the game alternates depends on a boolean in BattleShip config. If the boolean alternateOnHit is true, then the game alternates but if its false the players
+     * only switch when one player missses.
      * @param loc The designator for the shot
      * @return The status of the shot. See the status constants
      * @throws IllegalStateException    The game is not in Play Mode
-     * @throws IllegalArgumentException if the arguments is out of bounds of the char array (10 * 10 board)
+     * @throws IllegalArgumentException if the arguments is out of bounds (depending on config)
      */
     public Status makeShot(Location loc) {
+        if (!setupFinished()){
+            throw new IllegalStateException("Game is still in setup mode");
+        }
         if(winner() != null) {
-            throw new IllegalArgumentException("Game is over");
+            throw new IllegalStateException("Game is over");
         }
         if(!currentPlayer.isMakeShotLegal(loc)) {
             return Status.DO_OVER;

@@ -3,7 +3,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Represents the view for BattleShip
+ * Implementation for text based view for BattleShip. Displays instructions on how to play the game, and prints the defensive board of
+ * each player, and lets them place ships. Then players make shots on each others defensive board until one of them sinks all the ships.
+ * @author Endrias Kahssay
+ * @author Arnold Koh
+ * @author Russell Schneider
  */
 public class battleShipView {
     private static HashMap<String, possibleBoardStates> possibleBoardState;
@@ -21,55 +25,64 @@ public class battleShipView {
         mapShipToString("C", possibleBoardStates.CRUISER);
         mapShipToString("D1", possibleBoardStates.DESTROYER);
         mapShipToString("D2", possibleBoardStates.DESTROYER2);
+        mapShipToString("S", possibleBoardStates.SUBMARINE);
+        mapShipToString("MS1", possibleBoardStates.MINI_SUBMARINE);
+        mapShipToString("MS2", possibleBoardStates.MINI_SUBMARINE2);
     }
 
-    private static void mapShipToString(String rep, possibleBoardStates state){
-        if(config.getAllowedShips().contains(state)){
-            possibleBoardState.put(rep,state);
+    /**
+     * Maps a ship to a character if its exists in that game mode.
+     * @param rep - string repersentation of ship
+     * @param ship - ship
+     */
+    private static void mapShipToString(String rep, possibleBoardStates ship){
+        if(config.getAllowedShips().contains(ship)){
+            possibleBoardState.put(rep,ship);
         }
     }
     /**
-     * Correlates various ship states with characters
+     * Correlates the various states the board can be with characters that represent them on the board.
      */
     private static void  initGetStringForState(){
         getStringForState = new HashMap<possibleBoardStates,String>();
-        getStringForState.put(possibleBoardStates.AIRCRAFT_CARRIER, "A");
-        getStringForState.put(possibleBoardStates.BATTLESHIP, "B");
-        getStringForState.put(possibleBoardStates.CRUISER, "C");
-        getStringForState.put(possibleBoardStates.DESTROYER, "D1");
-        getStringForState.put(possibleBoardStates.DESTROYER2, "D2");
+        for( String key : possibleBoardState.keySet()){
+            getStringForState.put(possibleBoardState.get(key),key);
+        }
         getStringForState.put(possibleBoardStates.HIT, "H");
         getStringForState.put(possibleBoardStates.MISS, "M");
     }
 
     /**
-     * Set direction for ship placement
+     * Correlates Direction with respective character.
      */
     private static void initalizeStringDirection() {
         stringDirection = new HashMap<String, Direction>();
         stringDirection.put("U", Direction.UP);
         stringDirection.put("L", Direction.LEFT);
+        stringDirection.put("R", Direction.RIGHT);
+        stringDirection.put("D", Direction.DOWN);
         if(config.isDiagonalAllowed()) {
-            stringDirection.put("PD", Direction.POSDIAGONAL);
-            stringDirection.put("ND", Direction.NEGDIAGONAL);
+            stringDirection.put("UR", Direction.UPPER_RIGHT_DIAGONAL);
+            stringDirection.put("UL", Direction.UPPER_LEFT_DIAGONAL);
+            stringDirection.put("LR", Direction.LOWER_RIGHT_DIAGONAL);
+            stringDirection.put("LL", Direction.LOWER_LEFT_DIAGONAL);
         }
     }
 
     /**
-     * Initialize Battleship game
+     * Facilates Setup mode where each player places ships. Player 1 always comes first and after player 1 is done placing all their ships,
+     * player two follows.
      */
     public static void setup(){
-        config = new ConfigLoader("funorama.bshp.txt");
-        model = new BattleShipModel(config);
+        if(config == null){
+            config = new ConfigLoader("battleship.bshp.txt");
+            model = new BattleShipModel(config);
+        }
         initPossibleBoardState();
         initGetStringForState();
         initalizeStringDirection();
-        Location loc = new Location();
-        System.out.println("Get ready to play battleship! There are 5 possible ships you can place! 1 Aircraft Carrier (5 squares) , 1 Battleship (4 squares), 1 Cruiser (3 squares), 2 Destroyers (2 squares each).");
-        System.out.println("Type in the name of ship (A for Aircraft, B for BattleShip, C for cruiser, D1 for destroyer1, and D2 for destroyer 2). " +
-                "Also, type in the ship direction and the starting coordinate of where you want the ship to be placed. Possible directions are negative diagonal (represented by ND), " +
-                "postive diagonal (PD), up (U), left (L). E.g. Type in C,pd,D,1 - C stands for cruiser, PD means starting from D 1 it will place the ship diagonally (upper right)," +
-                " D 1 is the starting coordinate for the ship placement on the board.");
+        Location loc;
+        introduceGame();
         /**
          * Prompts players for ship placement
          */
@@ -77,8 +90,9 @@ public class battleShipView {
         boolean player1Done = false;
         while (!model.setupFinished()) {
             Players currentPlayer = model.getCurrentPlayer();
+            // print player one's defensive board one last time after placement of ships
             if(currentPlayer!= Players.PLAYER1 && !player1Done){
-                System.out.println("Player 1 is done putting ships. This is what player's one board looks like");
+                System.out.println("Player 1 is done putting ships. This is what player's one board looks like:");
                 printBoard(model.getPlayerDefBoard(Players.PLAYER1));
                 player1Done = true;
             }
@@ -87,7 +101,8 @@ public class battleShipView {
             printBoard(model.getPlayerDefBoard(model.getCurrentPlayer()));
             String user = input.nextLine();
             String[] split = user.split(",");
-            if (split.length < 4) {
+            // expected input should be in the format shipAlias,Direction,Row,Col coordinate
+            if (split.length != 4) {
                 System.out.println("Try again. Input was wrong");
                 continue;
             }
@@ -99,6 +114,7 @@ public class battleShipView {
                 continue;
             }
             try{
+                // the location are at index 2 and 3
                 loc = getColAndRow(Arrays.copyOfRange(split,2,4));
             }
             catch(Exception e){
@@ -116,11 +132,43 @@ public class battleShipView {
     }
 
     /**
-     * Prompts players for moves after ships have been placed
+     * Introduces the game and gives a basic instruction of how to play the game.
+     */
+    private static void introduceGame() {
+        System.out.print("Get ready to play battleship!");
+        System.out.println(" Below are the ships you can place ");
+        System.out.println(" text that corresponds to ship -> ship");
+        for( String key : possibleBoardState.keySet()){
+            System.out.println( key + " --> " + possibleBoardState.get(key) +" ---> " +model.getShipLengthDic(possibleBoardState.get(key)));
+        }
+        System.out.println("Below are the directions you can place the ship in.");
+        System.out.println("text that corresponds to direction -> direction");
+        for( String key : stringDirection.keySet()){
+            System.out.println( key + " --> " + stringDirection.get(key));
+        }
+        System.out.println("To place a ship, type in the the alias for the ship, followed by alias for direction, and then its starting coordinates from the board. The row should be the same" +
+                "\n as the character that is at the far left of that row, and the number should match the number far top of the row. Each should be sepearted by a comma.");
+        System.out.println("E.g. Type in C,UR,D,1  to place cruiser,starting from D,1 diagonally (upper right)");
+    }
+
+    /**
+     *Facilates play mode where each player make shots on each others board until one of sinks the other
+     * person's ships. When they switch turns is determined by the game type. In Funorama and Option 2, players switch when one player
+     * misses. In option 1, each player alternates.
      */
     public static void play(){
         Scanner input = new Scanner(System.in);
-        Location shot  = new Location();
+        Location shot;
+        System.out.println("Welcome to play mode.");
+        if(config.isSwitchEveryShot()){
+            System.out.println("Each player will alternate at making shots on other player.");
+        }
+        else{
+            System.out.println("One player will make shots until they miss and then players will switch.");
+        }
+        System.out.println(" Game is over when one " +
+        "person sinks all the other person's ships. Type in where you want to make the shot. For e.g A,4 would make a shot at A,4. A hit will be marked as H on the board " +
+                "and a miss will be recorded as M.");
         while (model.winner() == null) {
             System.out.println(model.getCurrentPlayer() + " turn to make shots on other player. Type in the location on the board for e.g A,4");
             printBoard(model.getPlayerOffBoard(model.getCurrentPlayer()));
@@ -139,7 +187,13 @@ public class battleShipView {
             }
             try {
                 Status status = model.makeShot(shot);
-                System.out.println(status);
+                if(status != Status.MISS && status != Status.HIT && status != status.DO_OVER )
+                {
+                    System.out.println("HIT. "+ status);
+                }
+                else{
+                    System.out.println(status);
+                }
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -151,7 +205,7 @@ public class battleShipView {
      * Prints the current state of the  Battleship board
      */
     private static void printBoard(possibleBoardStates [][] board) {
-        String lines =" ";
+        String lines ="--";
        for (int i = 0; i< Player.BOARD_LENGTH; i++){
            lines += "----";
        }
@@ -159,9 +213,8 @@ public class battleShipView {
         System.out.println();
         System.out.println(lines);
         for (int i = 0; i < board.length; i ++) {
-            System.out.print((char) ('A' +i));
+            System.out.print((char) ('A' +i) + " ");
             printOneRow(board[i]);
-            // will not print if its the last row
             if (i != board.length -1 ) {
                 System.out.println(lines);
             }
@@ -187,9 +240,9 @@ public class battleShipView {
     }
 
     /**
-     * Places ship by direction and coordinates
-     * @param shipAndLoc board location of ship
-     * @return pack ship placement on the grid
+     * Converts string board location to location object and returns it.
+     * @param shipAndLoc board location of ship in string
+     * @return pack location object
      */
     private static Ship getShipAndLocation(String [] shipAndLoc){
         Ship pack = new Ship();
@@ -197,16 +250,17 @@ public class battleShipView {
             pack.type = possibleBoardState.get(shipAndLoc[0]);
         }
         else {
-            throw new IllegalArgumentException("Ship doesn't exist. Try again");
+            throw new IllegalArgumentException("Ship doesn't exist. Try again.");
         }
         if (stringDirection.containsKey(shipAndLoc[1])) {
             pack.direction = stringDirection.get(shipAndLoc[1]);
         }
         else {
-            throw new IllegalArgumentException("Direction doesn't exist. Try again");
+            throw new IllegalArgumentException("Direction doesn't exist. Try again.");
         }
         return pack;
     }
+
     /**
      * Prints one row of the boardRow.
      *
@@ -220,16 +274,25 @@ public class battleShipView {
                 System.out.print("   ");
             }
             if(getStringForState.containsKey(value)){
-                System.out.print(" "+getStringForState.get(value)+" ");
+                String state = getStringForState.get(value);
+                // add two spaces to make it "Fit" in the center
+                if(state.length() == 1){
+                    state += " ";
+                    state = " " + state;
+                }
+                // avoid collapse of board
+                if(state.length() == 2 ){
+                    state += " ";
+                }
+                System.out.print(state);
             }
-            // will not print if last column
             System.out.print("|");
         }
         System.out.println();
     }
 
     /**
-     * Print out coordinates showing players' moves
+     * Print out  1 to board size on the top.
      */
     private static void printNum(){
 
@@ -238,92 +301,7 @@ public class battleShipView {
         }
     }
 
-    /**
-     * Place ships by specified coordinates
-     * @param type type of ship
-     * @param dir direction of ship placement
-     * @param row coordinate row
-     * @param col coordinate column
-     */
-    private static void testMethod(possibleBoardStates type, Direction dir, int row, int col){
-        Location x = new Location();
-        x.col = col;
-        x.row = row;
-        model.placeShip(type,dir,x);
-    }
 
-    /**
-     * Establish ship coordinates within the grid
-     */
-    private static void fill(){
-        config = new ConfigLoader("funorama.bshp.txt");
-        model = new BattleShipModel(config);
-        testMethod(possibleBoardStates.AIRCRAFT_CARRIER,Direction.POSDIAGONAL,8,0);
-        testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
-        testMethod(possibleBoardStates.DESTROYER,Direction.UP,8,5);
-        testMethod(possibleBoardStates.DESTROYER2,Direction.LEFT,7,7);
-        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,8,8);
-
-    }
-
-    public static Location testGameOver(int row, int col){
-        Location x = new Location();
-        x.row = row;
-        x.col = col;
-        return x;
-    }
-    private static void hitter(){
-        model.makeShot(testGameOver(9,0));
-        model.makeShot(testGameOver(8,1));
-        model.makeShot(testGameOver(7,2));
-        model.makeShot(testGameOver(6,3));
-        model.makeShot(testGameOver(5,4));
-        model.makeShot(testGameOver(4,4));
-        model.makeShot(testGameOver(3,3));
-        model.makeShot(testGameOver(2,2));
-        model.makeShot(testGameOver(1,1));
-        model.makeShot(testGameOver(9,5));
-        model.makeShot(testGameOver(8,5));
-        model.makeShot(testGameOver(7,7));
-        model.makeShot(testGameOver(7,6));
-        model.makeShot(testGameOver(9,6));
-        model.makeShot(testGameOver(9,7));
-        model.makeShot(testGameOver(9,8));
-       // model.makeShot(testGameOver(9,8));
-    }
-
-    private static void hitterTwo(){
-        model.makeShot(testGameOver(8,0));
-        model.makeShot(testGameOver(7,1));
-        model.makeShot(testGameOver(7,2));
-        model.makeShot(testGameOver(6,3));
-        model.makeShot(testGameOver(5,4));
-        model.makeShot(testGameOver(4,4));
-        model.makeShot(testGameOver(3,3));
-        model.makeShot(testGameOver(2,2));
-        model.makeShot(testGameOver(1,1));
-        model.makeShot(testGameOver(8,5));
-        model.makeShot(testGameOver(7,5));
-        model.makeShot(testGameOver(7,7));
-        model.makeShot(testGameOver(7,6));
-        model.makeShot(testGameOver(8,6));
-        model.makeShot(testGameOver(8,7));
-        model.makeShot(testGameOver(8,8));
-        // model.makeShot(testGameOver(9,8));
-    }
-    /**
-     * Establish ship coordinates within the grid
-     */
-    private static void fill8(){
-        config = new ConfigLoader("funorama.bshp.txt");
-        model = new BattleShipModel(config);
-        testMethod(possibleBoardStates.AIRCRAFT_CARRIER,Direction.POSDIAGONAL,8,0);
-        testMethod(possibleBoardStates.BATTLESHIP,Direction.NEGDIAGONAL,4,4);
-        testMethod(possibleBoardStates.DESTROYER,Direction.UP,8,5);
-        testMethod(possibleBoardStates.DESTROYER2,Direction.LEFT,7,7);
-        testMethod(possibleBoardStates.CRUISER,Direction.LEFT,8,8);
-
-    }
     /**
      * Main method
      * @param args

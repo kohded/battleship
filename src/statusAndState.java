@@ -1,5 +1,5 @@
 /**
- * Keeps track of the status and state of the game.
+ * Packaging for the status and state.
  */
 public class statusAndState {
     public Status status;

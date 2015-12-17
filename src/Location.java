@@ -1,11 +1,11 @@
 /**
- * A helper class for location
+ * A helper class for storing location.
+ * @Author Endrias Kahssay
  */
 class Location {
     public Location(){
 
     }
-
     /**
      * Location constructor
      * @param row coordinate row

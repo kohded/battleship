@@ -24,6 +24,12 @@ public enum possibleBoardStates {
      */
     DESTROYER2,
     HIT_DESTROYER2,
+    SUBMARINE,
+    HIT_SUBMARINE,
+    MINI_SUBMARINE,
+    HIT_MINI_SUBMARINE,
+    MINI_SUBMARINE2,
+    HIT_MINI_SUBMARINE2,
     /**
      * MISS, HIT, EMPTY
      */
